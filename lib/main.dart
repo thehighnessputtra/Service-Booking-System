@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:service_booking_system/splashscreen/splashscreen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -16,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Intl.defaultLocale = 'id';
     // initializeDateFormatting("id");
-    return MaterialApp(
+    return const MaterialApp(
         localizationsDelegates: [GlobalMaterialLocalizations.delegate],
         supportedLocales: [Locale('en'), Locale('id')],
         home: SplashScreen());
