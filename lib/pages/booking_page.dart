@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
+import 'package:service_booking_system/widget/custom_text.dart';
 import 'package:service_booking_system/widget/custom_textformfield.dart';
 
 class BookingPage extends StatefulWidget {
@@ -15,8 +16,25 @@ class _BookingPageState extends State<BookingPage> {
   TextEditingController controllerNoHP = TextEditingController();
   TextEditingController controllerTipeMotor = TextEditingController();
   TextEditingController controllerNoPolisi = TextEditingController();
+  TextEditingController controllerJumlahKM = TextEditingController();
+  TextEditingController controllerJenisServis = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
+  int calcDate = DateTime.now().millisecondsSinceEpoch + 86400000;
+
+  List listJenisServis = ["Servis Ringan", "Servis Besar"];
+  String valueJenisServis = "";
+  String valueJamKerja = "";
+  List listJamKerja = [
+    "08.00 WIB",
+    "09.00 WIB",
+    "10.00 WIB",
+    "11.00 WIB",
+    "13.00 WIB",
+    "14.00 WIB",
+    "15.00 WIB",
+    "16.00 WIB",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -33,20 +51,53 @@ class _BookingPageState extends State<BookingPage> {
               height: 20.0,
             ),
             CustomTextFormField(
-              hint: DateFormat("EEEE, d-MMMM-y").format(selectedDate),
+              hint: DateFormat("EEEE, d-MMMM-y", "ID").format(selectedDate),
               formNama: "Tanggal",
               readOnly: true,
               onTap: () async {
                 DateTime? pickedDate = await showDatePicker(
                   context: context,
-                  initialDate: selectedDate,
+                  initialDate: DateTime.fromMillisecondsSinceEpoch(calcDate),
+                  locale: const Locale("in", "ID"),
                   firstDate: DateTime.now(),
-                  lastDate: DateTime(2030),
+                  lastDate: DateTime(2040),
                 );
                 setState(() {
                   selectedDate = pickedDate!;
                 });
               },
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Jam Servis",
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+              ),
+              isExpanded: true,
+              hint: Text(valueJamKerja),
+              validator: (value) {
+                if (valueJamKerja == "") {
+                  return 'Jam Servis tidak boleh kosong';
+                }
+              },
+              elevation: 0,
+              borderRadius: BorderRadius.circular(12),
+              onChanged: (value) {
+                setState(() {
+                  valueJamKerja = value!;
+                });
+              },
+              items: listJamKerja
+                  .map<DropdownMenuItem<String>>(
+                    (e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ),
+                  )
+                  .toList(),
             ),
             const SizedBox(
               height: 10.0,
@@ -69,12 +120,53 @@ class _BookingPageState extends State<BookingPage> {
               formNama: "Tipe Motor",
               controller: controllerTipeMotor,
             ),
+            CustomTextSmall(text: "contoh : Yamaha Mio M3 125"),
             const SizedBox(
               height: 10.0,
             ),
             CustomTextFormField(
               formNama: "No Polisi",
               controller: controllerNoPolisi,
+            ),
+            CustomTextSmall(text: "contoh : B 4444 SR"),
+            const SizedBox(
+              height: 10.0,
+            ),
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Jenis Servis",
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+              ),
+              isExpanded: true,
+              hint: Text(valueJenisServis),
+              validator: (value) {
+                if (valueJenisServis == "") {
+                  return 'Jenis Servis tidak boleh kosong';
+                }
+              },
+              elevation: 0,
+              borderRadius: BorderRadius.circular(12),
+              onChanged: (value) {
+                setState(() {
+                  valueJenisServis = value!;
+                });
+              },
+              items: listJenisServis
+                  .map<DropdownMenuItem<String>>(
+                    (e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ),
+                  )
+                  .toList(),
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            CustomTextFormField(
+              formNama: "Jumlah KM",
+              controller: controllerJumlahKM,
             ),
             const SizedBox(
               height: 10.0,
@@ -120,13 +212,13 @@ class _BookingPageState extends State<BookingPage> {
                                           const Expanded(
                                             flex: 1,
                                             child: Text(
-                                              "Tanggal",
+                                              "Tgl/Jam",
                                             ),
                                           ),
                                           Expanded(
                                               flex: 3,
                                               child: Text(
-                                                  ": ${DateFormat("EEEE, d-MMMM-y").format(selectedDate)}"))
+                                                  ": ${DateFormat("EEEE, d-MMMM-y").format(selectedDate)} / $valueJamKerja"))
                                         ],
                                       ),
                                       Row(
@@ -183,6 +275,34 @@ class _BookingPageState extends State<BookingPage> {
                                               flex: 3,
                                               child: Text(
                                                   ": ${controllerNoPolisi.text}"))
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              "Jenis Servis",
+                                            ),
+                                          ),
+                                          Expanded(
+                                              flex: 3,
+                                              child:
+                                                  Text(": $valueJenisServis"))
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              "Jumlah Km",
+                                            ),
+                                          ),
+                                          Expanded(
+                                              flex: 3,
+                                              child: Text(
+                                                  ": ${controllerJumlahKM.text} Km"))
                                         ],
                                       ),
                                       const SizedBox(

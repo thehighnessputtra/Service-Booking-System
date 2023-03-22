@@ -32,6 +32,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           hintText: widget.hint,
           border: const OutlineInputBorder(),
           labelText: widget.formNama,
+          labelStyle: TextStyle(color: Colors.black87),
           floatingLabelBehavior: FloatingLabelBehavior.always),
     );
   }

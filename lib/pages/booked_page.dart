@@ -13,44 +13,56 @@ class BookedPage extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  flex: 3,
+                  flex: 5,
                   child: Column(
                     children: [
                       Row(
                         children: const [
-                          Expanded(flex: 1, child: Text("Tanggal")),
-                          Expanded(flex: 3, child: Text(": Tanggal")),
+                          Expanded(flex: 2, child: Text("Tgl/Jam")),
+                          Expanded(flex: 5, child: Text(": Tanggal")),
                         ],
                       ),
                       Row(
                         children: const [
-                          Expanded(flex: 1, child: Text("Nama")),
-                          Expanded(flex: 3, child: Text(": Nama")),
+                          Expanded(flex: 2, child: Text("Nama")),
+                          Expanded(flex: 5, child: Text(": Nama")),
                         ],
                       ),
                       Row(
                         children: const [
-                          Expanded(flex: 1, child: Text("No HP")),
-                          Expanded(flex: 3, child: Text(": No HP")),
+                          Expanded(flex: 2, child: Text("No HP")),
+                          Expanded(flex: 5, child: Text(": No HP")),
                         ],
                       ),
                       Row(
                         children: const [
-                          Expanded(flex: 1, child: Text("Tipe Motor")),
-                          Expanded(flex: 3, child: Text(": Tipe Motor")),
+                          Expanded(flex: 2, child: Text("Tipe Motor")),
+                          Expanded(flex: 5, child: Text(": Tipe Motor")),
                         ],
                       ),
                       Row(
                         children: const [
-                          Expanded(flex: 1, child: Text("No Polisi")),
-                          Expanded(flex: 3, child: Text(": No Polisi")),
+                          Expanded(flex: 2, child: Text("No Polisi")),
+                          Expanded(flex: 5, child: Text(": No Polisi")),
+                        ],
+                      ),
+                      Row(
+                        children: const [
+                          Expanded(flex: 2, child: Text("Jenis Servis")),
+                          Expanded(flex: 5, child: Text(": No Polisi")),
+                        ],
+                      ),
+                      Row(
+                        children: const [
+                          Expanded(flex: 2, child: Text("Jumlah Km")),
+                          Expanded(flex: 5, child: Text(": No Polisi")),
                         ],
                       ),
                     ],
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: GestureDetector(
                     onTap: () async {
                       await showModalBottomSheet<void>(
@@ -79,7 +91,7 @@ class BookedPage extends StatelessWidget {
                       );
                     },
                     child: Container(
-                      height: 90,
+                      height: 125,
                       color: Colors.green,
                     ),
                   ),
