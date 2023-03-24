@@ -30,12 +30,17 @@ environment:
 dependencies:
   cloud_firestore: ^4.4.5
   cupertino_icons: ^1.0.2
+  file_picker: ^5.2.6
+  firebase_auth: ^4.3.0
   firebase_core: ^2.8.0
+  firebase_storage: ^11.0.16
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
   intl: any
+  shared_preferences: ^2.0.20
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_lints: ^2.0.0
