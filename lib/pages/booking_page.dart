@@ -244,6 +244,11 @@ class _BookingPageState extends State<BookingPage> {
                 CustomTextFormField(
                   hint: fotoNama,
                   readOnly: true,
+                  validasi: (value) {
+                    if (fotoNama == "Masukan Gambar Motor") {
+                      return "Masukan foto motor anda!";
+                    }
+                  },
                   formNama: "Gambar Motor",
                   onTap: () {
                     uploadImage();
@@ -454,14 +459,21 @@ class _BookingPageState extends State<BookingPage> {
                                                             tipeMotor:
                                                                 controllerTipeMotor
                                                                     .text);
-                                                  }
+                                                    Future.delayed(
+                                                        Duration(seconds: 1),
+                                                        () {
+                                                      dialogInfo(
+                                                          context,
+                                                          "Berhasil booking!",
+                                                          3);
+                                                    });
 
-                                                  dialogInfo(context,
-                                                      "Berhasil booking!", 3);
-                                                  Future.delayed(
-                                                      Duration(seconds: 3), () {
-                                                    Navigator.pop(context);
-                                                  });
+                                                    Future.delayed(
+                                                        Duration(seconds: 3),
+                                                        () {
+                                                      Navigator.pop(context);
+                                                    });
+                                                  }
                                                 },
                                                 child: const Text("Yes"),
                                               ),

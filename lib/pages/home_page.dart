@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:service_booking_system/auth/login_page.dart';
 import 'package:service_booking_system/pages/list_booking_page.dart';
 import 'package:service_booking_system/pages/booking_page.dart';
-import 'package:service_booking_system/pages/jadwal_booking_page.dart';
+import 'package:service_booking_system/pages/jadwal_servis_page.dart';
 import 'package:service_booking_system/pages/log_booking_page.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';

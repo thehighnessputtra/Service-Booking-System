@@ -16,7 +16,7 @@ class _JadwalServisPageState extends State<JadwalServisPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Jadwal Booking"),
+        title: const Text("Jadwal Servis"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

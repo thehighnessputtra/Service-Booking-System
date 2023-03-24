@@ -6,7 +6,7 @@ void dialogInfo(BuildContext context, String text, int durationDelay) async {
   });
   await showDialog<void>(
     context: context,
-    // barrierDismissible: false,
+    barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
         shape: const RoundedRectangleBorder(
