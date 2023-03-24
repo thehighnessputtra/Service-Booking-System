@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
             onPress: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TesterPage()),
+                MaterialPageRoute(builder: (context) => const BookingPage()),
               );
             },
           ),
@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const BookedPage()),
               );
             },
-          )
+          ),
         ],
       ),
     );

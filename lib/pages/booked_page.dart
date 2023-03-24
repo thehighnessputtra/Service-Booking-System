@@ -50,8 +50,7 @@ class _HasilBookingState extends State<HasilBooking> {
       itemCount: widget.listHasilBooking.length,
       itemBuilder: (context, index) {
         final itemsList = widget.listHasilBooking[index];
-        String storageTanggal = itemsList["tanggal"];
-        String storageJam = itemsList["jam"];
+        String storageTanggal = itemsList["tanggal+jam"];
         String storageNama = itemsList["nama"];
         String storageNoHP = itemsList["noHp"];
         String storageTipeMotor = itemsList["tipeMotor"];
@@ -73,9 +72,7 @@ class _HasilBookingState extends State<HasilBooking> {
                         Row(
                           children: [
                             const Expanded(flex: 2, child: Text("Tgl/Jam")),
-                            Expanded(
-                                flex: 5,
-                                child: Text(": $storageTanggal/$storageJam")),
+                            Expanded(flex: 5, child: Text(": $storageTanggal")),
                           ],
                         ),
                         Row(
@@ -138,9 +135,9 @@ class _HasilBookingState extends State<HasilBooking> {
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        const Text('Foto Motor'),
-                                        const SizedBox(
+                                      children: const <Widget>[
+                                        Text('Foto Motor'),
+                                        SizedBox(
                                           height: 20.0,
                                         ),
                                       ],
