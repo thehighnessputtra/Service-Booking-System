@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:service_booking_system/navbar/navigation_bar.dart';
 import 'package:service_booking_system/pages/home_page.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
@@ -51,7 +52,8 @@ class LoginPage extends StatelessWidget {
               onPress: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(
+                      builder: (context) => const NavigationBarUI()),
                 );
               }),
         ],

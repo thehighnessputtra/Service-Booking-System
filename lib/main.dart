@@ -18,9 +18,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Intl.defaultLocale = 'id';
     // initializeDateFormatting("id");
-    return const MaterialApp(
-        localizationsDelegates: [GlobalMaterialLocalizations.delegate],
-        supportedLocales: [Locale('en'), Locale('id')],
-        home: SplashScreen());
+    return MaterialApp(
+        theme: ThemeData(
+            appBarTheme: const AppBarTheme(backgroundColor: Colors.green)),
+        localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
+        supportedLocales: const [Locale('en'), Locale('id')],
+        home: const SplashScreen());
   }
 }

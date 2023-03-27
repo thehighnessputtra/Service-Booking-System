@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:service_booking_system/auth/login_page.dart';
+import 'package:service_booking_system/navbar/navigation_bar.dart';
 import 'package:service_booking_system/pages/home_page.dart';
 import 'package:service_booking_system/servies/shared_service.dart';
 import 'package:service_booking_system/widget/custom_notification.dart';
@@ -32,7 +33,7 @@ class FirebaseService {
       pref.saveEmail(email);
 
       // ignore: use_build_context_synchronously
-      authRoute(context, "Login success!", const HomePage());
+      authRoute(context, "Login success!", const NavigationBarUI());
     } on FirebaseAuthException catch (e) {
       // dialogInfo(context, e.message!);
       if (e.message ==
