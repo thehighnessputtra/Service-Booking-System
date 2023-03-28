@@ -104,35 +104,42 @@ class _BookingPageState extends State<BookingPage> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Jam Servis",
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                SizedBox(
+                  height: 50,
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      isDense: true,
+                      labelStyle: TextStyle(color: Colors.black87),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green)),
+                      labelText: "Jam Servis",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                    ),
+                    isExpanded: true,
+                    hint: Text(valueJamKerja),
+                    validator: (value) {
+                      if (valueJamKerja == "") {
+                        return 'Jam Servis tidak boleh kosong!';
+                      }
+                      return null;
+                    },
+                    elevation: 0,
+                    borderRadius: BorderRadius.circular(12),
+                    onChanged: (value) {
+                      setState(() {
+                        valueJamKerja = value!;
+                      });
+                    },
+                    items: listJamKerja
+                        .map<DropdownMenuItem<String>>(
+                          (e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ),
+                        )
+                        .toList(),
                   ),
-                  isExpanded: true,
-                  hint: Text(valueJamKerja),
-                  validator: (value) {
-                    if (valueJamKerja == "") {
-                      return 'Jam Servis tidak boleh kosong!';
-                    }
-                    return null;
-                  },
-                  elevation: 0,
-                  borderRadius: BorderRadius.circular(12),
-                  onChanged: (value) {
-                    setState(() {
-                      valueJamKerja = value!;
-                    });
-                  },
-                  items: listJamKerja
-                      .map<DropdownMenuItem<String>>(
-                        (e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(e),
-                        ),
-                      )
-                      .toList(),
                 ),
                 const SizedBox(
                   height: 10.0,
@@ -140,6 +147,7 @@ class _BookingPageState extends State<BookingPage> {
                 CustomTextFormField(
                   formNama: "Nama",
                   controller: controllerNama,
+                  hint: "Puttra Park",
                   validasi: (value) {
                     if (value!.isEmpty) {
                       return "Nama tidak boleh kosong!";
@@ -193,35 +201,42 @@ class _BookingPageState extends State<BookingPage> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Jenis Servis",
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                SizedBox(
+                  height: 50,
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      isDense: true,
+                      labelStyle: TextStyle(color: Colors.black87),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green)),
+                      labelText: "Jenis Servis",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                    ),
+                    isExpanded: true,
+                    hint: Text(valueJenisServis),
+                    validator: (value) {
+                      if (valueJenisServis == "") {
+                        return 'Jenis Servis tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                    elevation: 0,
+                    borderRadius: BorderRadius.circular(12),
+                    onChanged: (value) {
+                      setState(() {
+                        valueJenisServis = value!;
+                      });
+                    },
+                    items: listJenisServis
+                        .map<DropdownMenuItem<String>>(
+                          (e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ),
+                        )
+                        .toList(),
                   ),
-                  isExpanded: true,
-                  hint: Text(valueJenisServis),
-                  validator: (value) {
-                    if (valueJenisServis == "") {
-                      return 'Jenis Servis tidak boleh kosong';
-                    }
-                    return null;
-                  },
-                  elevation: 0,
-                  borderRadius: BorderRadius.circular(12),
-                  onChanged: (value) {
-                    setState(() {
-                      valueJenisServis = value!;
-                    });
-                  },
-                  items: listJenisServis
-                      .map<DropdownMenuItem<String>>(
-                        (e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(e),
-                        ),
-                      )
-                      .toList(),
                 ),
                 const SizedBox(
                   height: 10.0,
@@ -508,7 +523,7 @@ class _BookingPageState extends State<BookingPage> {
           context, "Silahkan isi No. Handphone terlebih dahulu");
     } else {
       final result = await FilePicker.platform
-          .pickFiles(allowMultiple: false, type: FileType.any);
+          .pickFiles(allowMultiple: false, type: FileType.image);
       if (result != null) {
         final path = result.files.single.path!;
         final fileName = result.files.single.name;

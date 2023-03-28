@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:service_booking_system/pages/booking_page.dart';
 import 'package:service_booking_system/pages/home_page.dart';
@@ -18,7 +20,6 @@ class _NavigationBarUIState extends State<NavigationBarUI> {
     const JadwalServisPage(),
     const BookingPage(),
     const BookedPage(),
-    const LogBookingPage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -49,10 +50,6 @@ class _NavigationBarUIState extends State<NavigationBarUI> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.document_scanner),
                 label: 'List Booking',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.history),
-                label: 'Log Booking',
               ),
             ]));
   }

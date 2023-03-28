@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:service_booking_system/pages/log_booking_page.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,11 +15,48 @@ class BookedPage extends StatefulWidget {
 }
 
 class _BookedPageState extends State<BookedPage> {
+  String? email;
+  String? role;
+
+  Future getAcc() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.email)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        setState(() {
+          email = value.data()!["email"];
+          role = value.data()!["role"];
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    getAcc();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("List Booking"),
+        actions: [
+          role == "Admin"
+              ? IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LogBookingPage()),
+                    );
+                  },
+                  icon: Icon(Icons.history))
+              : SizedBox(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -118,7 +156,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                       flex: 5, child: Text(": $storageNoHP")),
                                 ],
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                         Row(
                           children: [
                             const Expanded(flex: 2, child: Text("Tipe Motor")),
@@ -136,7 +174,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                       child: Text(": $storageNoPolisi")),
                                 ],
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                         Row(
                           children: [
                             const Expanded(
@@ -155,7 +193,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                       child: Text(": $storageJumlahKm")),
                                 ],
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                         role == "Admin"
                             ? Row(
                                 children: [
@@ -166,11 +204,11 @@ class _HasilBookingState extends State<HasilBooking> {
                                       child: Text(": $storageCreateTime")),
                                 ],
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                         Row(
                           children: [
                             const Expanded(flex: 2, child: Text("Status")),
-                            Expanded(flex: 5, child: Text(": Menunggu")),
+                            const Expanded(flex: 5, child: Text(": Menunggu")),
                           ],
                         ),
                         role == "Admin"
@@ -265,7 +303,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                             ListBody(
                                                                           children: <
                                                                               Widget>[
-                                                                            Text('Silahkan hubungi costumer melalui WA'),
+                                                                            const Text('Silahkan hubungi costumer melalui WA'),
                                                                             CustomButton1(
                                                                                 btnName: "Chat WA",
                                                                                 onPress: () async {
@@ -453,7 +491,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                             ListBody(
                                                                           children: <
                                                                               Widget>[
-                                                                            Text('Silahkan hubungi costumer melalui WA'),
+                                                                            const Text('Silahkan hubungi costumer melalui WA'),
                                                                             CustomButton1(
                                                                                 btnName: "Chat WA",
                                                                                 onPress: () async {
@@ -572,7 +610,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                 color: Colors.green,
                               ),
                             )
-                          : SizedBox())
+                          : const SizedBox())
                 ],
               ),
               const Divider(
