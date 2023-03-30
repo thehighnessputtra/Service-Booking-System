@@ -1,6 +1,9 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,7 +25,7 @@ class _JadwalServisPageState extends State<JadwalServisPage> {
         padding: const EdgeInsets.all(8.0),
         child: StreamBuilder(
           stream:
-              FirebaseFirestore.instance.collection('fixedBooking').snapshots(),
+              FirebaseFirestore.instance.collection('jadwalServis').snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListJadwalServisPage(
@@ -83,9 +86,9 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
           String storageNoPolisi = itemsList["noPolisi"];
           String storageJenisServis = itemsList["jenisServis"];
           String storageJumlahKm = itemsList["jumlahKm"];
-          String storageAccBy = itemsList["accBy"];
-          String storageGambarNama = itemsList["gambarNama"];
+          String storageStatus = itemsList["status"];
           String storageGambarUrl = itemsList["gambarUrl"];
+          String storageUpdateBy = itemsList["updateBy"];
 
           return Column(
               // padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -118,7 +121,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                         flex: 5, child: Text(": $storageNoHP")),
                                   ],
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                           Row(
                             children: [
                               const Expanded(
@@ -137,7 +140,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                         child: Text(": $storageNoPolisi")),
                                   ],
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                           Row(
                             children: [
                               const Expanded(
@@ -148,10 +151,10 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                             ],
                           ),
                           Row(
-                            children: const [
-                              Expanded(flex: 2, child: Text("Status")),
+                            children: [
+                              const Expanded(flex: 2, child: Text("Status")),
                               Expanded(
-                                  flex: 5, child: Text(": Booking diterima")),
+                                  flex: 5, child: Text(": $storageStatus")),
                             ],
                           ),
                           role == "Admin"
@@ -164,7 +167,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                         child: Text(": $storageJumlahKm")),
                                   ],
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                           role == "Admin"
                               ? Row(
                                   children: [
@@ -172,34 +175,78 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                         flex: 2, child: Text("Acc by")),
                                     Expanded(
                                         flex: 5,
-                                        child: Text(": $storageAccBy")),
+                                        child: Text(": $storageUpdateBy")),
                                   ],
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                           role == "Admin"
                               ? Row(
                                   children: [
-                                    CustomButton1(
-                                        btnName: "Chat WA",
-                                        onPress: () async {
-                                          if (storageNoHP != null) {
-                                            final Uri url = Uri.parse(
-                                                "https://wa.me/$storageNoHP");
-                                            if (!await launchUrl(url,
-                                                mode: LaunchMode
-                                                    .externalApplication)) {
-                                              throw "Could not launch $url";
-                                            }
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                                    content: Text(
-                                                        "Could not launch URL!")));
-                                          }
-                                        }),
+                                    Row(
+                                      children: [
+                                        CustomButton1(
+                                            btnName: "Chat WA",
+                                            onPress: () async {
+                                              if (storageNoHP != null) {
+                                                final Uri url = Uri.parse(
+                                                    "https://wa.me/$storageNoHP");
+                                                if (!await launchUrl(url,
+                                                    mode: LaunchMode
+                                                        .externalApplication)) {
+                                                  throw "Could not launch $url";
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(const SnackBar(
+                                                        content: Text(
+                                                            "Could not launch URL!")));
+                                              }
+                                            }),
+                                        const SizedBox(
+                                          width: 5.0,
+                                        ),
+                                        CustomButton3(
+                                            btnName: "SELESAI",
+                                            onPress: () async {
+                                              FirebaseService(
+                                                      FirebaseAuth.instance)
+                                                  .updateStatusLogBooking(
+                                                      tanggaljam:
+                                                          storageTanggal,
+                                                      status: "Servis selesai",
+                                                      noHp: storageNoHP);
+                                              FirebaseService(
+                                                      FirebaseAuth.instance)
+                                                  .deleteJadwalServisToFirebase(
+                                                noHP: storageNoHP,
+                                                tnglJam: storageTanggal,
+                                              );
+                                            }),
+                                        const SizedBox(
+                                          width: 5.0,
+                                        ),
+                                        CustomButton2(
+                                            btnName: "CANCEL",
+                                            onPress: () async {
+                                              FirebaseService(
+                                                      FirebaseAuth.instance)
+                                                  .updateStatusLogBooking(
+                                                      tanggaljam:
+                                                          storageTanggal,
+                                                      status: "Servis cancel",
+                                                      noHp: storageNoHP);
+                                              FirebaseService(
+                                                      FirebaseAuth.instance)
+                                                  .deleteJadwalServisToFirebase(
+                                                noHP: storageNoHP,
+                                                tnglJam: storageTanggal,
+                                              );
+                                            }),
+                                      ],
+                                    ),
                                   ],
                                 )
-                              : SizedBox()
+                              : const SizedBox()
                         ],
                       ),
                     ),
@@ -225,19 +272,19 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                             ],
                                           ),
                                         ),
-                                        actions: <Widget>[],
+                                        actions: const <Widget>[],
                                       );
                                     },
                                   );
                                 },
                                 child: Container(
-                                  child: Image.network(storageGambarUrl,
-                                      fit: BoxFit.cover),
                                   height: 160,
                                   color: Colors.green,
+                                  child: Image.network(storageGambarUrl,
+                                      fit: BoxFit.cover),
                                 ),
                               )
-                            : SizedBox())
+                            : const SizedBox())
                   ],
                 ),
                 const Divider(

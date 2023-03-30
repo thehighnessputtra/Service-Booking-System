@@ -1,12 +1,15 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:service_booking_system/auth/login_page.dart';
+import 'package:service_booking_system/pages/review_service.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/utils/constant.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
-import 'package:service_booking_system/widget/custom_notification.dart';
 import 'package:service_booking_system/widget/custom_textformfield.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,7 +22,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TextEditingController controllerNoHP = TextEditingController();
-  TextEditingController controllerReview = TextEditingController();
+  TextEditingController controllerKomentar = TextEditingController();
+  double ratingReview = 1.0;
   DateTime selectedDate = DateTime.now();
   int calcDate = DateTime.now().millisecondsSinceEpoch + 86400000;
   String fotoNama = "Masukan Gambar Motor";
@@ -368,16 +372,38 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         const SizedBox(
-          height: 10.0,
+          height: 5.0,
+        ),
+        RatingBar.builder(
+          initialRating: 3,
+          glow: false,
+          minRating: 1,
+          direction: Axis.horizontal,
+          allowHalfRating: true,
+          itemCount: 5,
+          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+          itemBuilder: (context, _) => const Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          onRatingUpdate: (rating) {
+            setState(() {
+              ratingReview = rating;
+            });
+          },
+        ),
+        Text(ratingReview.toString()),
+        const SizedBox(
+          height: 5.0,
         ),
         CustomTextFormField(
           setHigh: true,
-          formNama: "Review",
+          formNama: "Komentar",
           hint: "Pelayanan sangat baik",
           minLine: 3,
           maxLine: 5,
           height: 80,
-          controller: controllerReview,
+          controller: controllerKomentar,
           validasi: (value) {
             if (value!.isEmpty) {
               return "No Handphone tidak boleh kosong!";
@@ -389,8 +415,137 @@ class _HomePageState extends State<HomePage> {
           width: double.infinity,
           child: CustomButton3(
             btnName: "Kirim Review",
-            onPress: () {
-              dialogInfoWithoutDelay(context, "Cooming soon!");
+            onPress: () async {
+              await showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return Container(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Wrap(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                "KONFIRMASI REVIEW",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      "Tgl/Jam",
+                                    ),
+                                  ),
+                                  const Text(
+                                    ":",
+                                  ),
+                                  Expanded(
+                                      flex: 3,
+                                      child: Text(
+                                          "${DateFormat("EEEE, d-MMMM-y", "ID").format(selectedDate)} / $valueJamKerja"))
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      "No HP",
+                                    ),
+                                  ),
+                                  const Text(
+                                    ":",
+                                  ),
+                                  Expanded(
+                                      flex: 3, child: Text(controllerNoHP.text))
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      "Rating",
+                                    ),
+                                  ),
+                                  const Text(
+                                    ":",
+                                  ),
+                                  Expanded(
+                                      flex: 3, child: Text("$ratingReview"))
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      "Komentar",
+                                    ),
+                                  ),
+                                  const Text(
+                                    ":",
+                                  ),
+                                  Expanded(
+                                      flex: 3,
+                                      child: Text(controllerKomentar.text))
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.grey[600],
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("No"),
+                                  ),
+                                  const SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blueGrey,
+                                    ),
+                                    onPressed: () {
+                                      FirebaseService(FirebaseAuth.instance)
+                                          .updateReviewLogBooking(
+                                              tanggaljam:
+                                                  "${DateFormat("d-MMMM-y", "ID").format(selectedDate)} $valueJamKerja",
+                                              noHp: controllerNoHP.text,
+                                              rating: ratingReview.toString(),
+                                              komentar:
+                                                  controllerKomentar.text);
+                                    },
+                                    child: const Text("Yes"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
             },
           ),
         )
@@ -399,8 +554,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   review() {
-    return Text("Berikut review dari customer pada pelayanan kami",
-        style: size14, textAlign: TextAlign.justify);
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance.collection('logBooking').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ListReviewService(
+            listHasilBooking: snapshot.data!.docs,
+          );
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
   }
 
   kontak() {

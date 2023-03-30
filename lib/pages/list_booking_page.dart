@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -54,8 +56,8 @@ class _BookedPageState extends State<BookedPage> {
                           builder: (context) => const LogBookingPage()),
                     );
                   },
-                  icon: Icon(Icons.history))
-              : SizedBox(),
+                  icon: const Icon(Icons.history))
+              : const SizedBox(),
         ],
       ),
       body: Padding(
@@ -126,6 +128,7 @@ class _HasilBookingState extends State<HasilBooking> {
         String storageGambarNama = itemsList["gambarNama"];
         String storageGambarUrl = itemsList["gambarUrl"];
         String storageCreateTime = itemsList["createTime"];
+        String storageStatus = itemsList["status"];
 
         return Column(
             // padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -208,7 +211,7 @@ class _HasilBookingState extends State<HasilBooking> {
                         Row(
                           children: [
                             const Expanded(flex: 2, child: Text("Status")),
-                            const Expanded(flex: 5, child: Text(": Menunggu")),
+                            Expanded(flex: 5, child: Text(": $storageStatus")),
                           ],
                         ),
                         role == "Admin"
@@ -322,8 +325,8 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                     );
                                                                   },
                                                                 );
-                                                                FirebaseService(FirebaseAuth.instance).postFixedBookingToFirestore(
-                                                                    accBy:
+                                                                FirebaseService(FirebaseAuth.instance).postJadwalServisToFirestore(
+                                                                    emailAdmin:
                                                                         email!,
                                                                     gambarNama:
                                                                         storageGambarNama,
@@ -352,6 +355,8 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                           FirebaseAuth
                                                                               .instance)
                                                                       .postLogBookingToFireStore(
+                                                                    emailAdmin:
+                                                                        email!,
                                                                     gambarNama:
                                                                         storageGambarNama,
                                                                     gambarUrl:
@@ -363,7 +368,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                     nama:
                                                                         storageNama,
                                                                     status:
-                                                                        "DITERIMA $email",
+                                                                        "Servis diterima",
                                                                     noHp:
                                                                         storageNoHP,
                                                                     noPolisi:
@@ -520,6 +525,8 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                           FirebaseAuth
                                                                               .instance)
                                                                       .postLogBookingToFireStore(
+                                                                    emailAdmin:
+                                                                        email!,
                                                                     gambarNama:
                                                                         storageGambarNama,
                                                                     gambarUrl:
@@ -531,7 +538,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                     nama:
                                                                         storageNama,
                                                                     status:
-                                                                        "DITOLAK $email",
+                                                                        "DITOLAK",
                                                                     noHp:
                                                                         storageNoHP,
                                                                     noPolisi:
@@ -598,16 +605,16 @@ class _HasilBookingState extends State<HasilBooking> {
                                           ],
                                         ),
                                       ),
-                                      actions: <Widget>[],
+                                      actions: const <Widget>[],
                                     );
                                   },
                                 );
                               },
                               child: Container(
-                                child: Image.network(storageGambarUrl,
-                                    fit: BoxFit.cover),
                                 height: role == "Admin" ? 160 : 125,
                                 color: Colors.green,
+                                child: Image.network(storageGambarUrl,
+                                    fit: BoxFit.cover),
                               ),
                             )
                           : const SizedBox())

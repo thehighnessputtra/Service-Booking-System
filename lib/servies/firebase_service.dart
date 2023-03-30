@@ -1,14 +1,9 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:service_booking_system/auth/login_page.dart';
 import 'package:service_booking_system/navbar/navigation_bar.dart';
-import 'package:service_booking_system/pages/home_page.dart';
 import 'package:service_booking_system/servies/shared_service.dart';
 import 'package:service_booking_system/widget/custom_notification.dart';
 import 'package:service_booking_system/widget/transition_widget.dart';
@@ -74,12 +69,12 @@ class FirebaseService {
       required String jumlahKm,
       required String gambarNama,
       required String gambarUrl}) async {
-    var user = FirebaseAuth.instance.currentUser;
     CollectionReference fireStore =
         FirebaseFirestore.instance.collection('listBooking');
     fireStore.doc("$tnglJam $noHp").set({
       "tanggal+jam": tnglJam,
       "nama": nama,
+      "status": "Menunggu",
       "noHp": noHp,
       "tipeMotor": tipeMotor,
       "noPolisi": noPolisi,
@@ -87,6 +82,8 @@ class FirebaseService {
       "jumlahKm": jumlahKm,
       "gambarNama": gambarNama,
       "gambarUrl": gambarUrl,
+      "komentar": "Belum ada komentar",
+      "rating": "Belum ada rating",
       "createTime":
           DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
     });
@@ -101,13 +98,15 @@ class FirebaseService {
     required String jenisServis,
     required String jumlahKm,
     required String gambarNama,
+    required String emailAdmin,
     required String gambarUrl,
     required String status,
   }) {
     CollectionReference fireStore =
         FirebaseFirestore.instance.collection('logBooking');
-    fireStore.doc(DateTime.now().millisecondsSinceEpoch.toString()).set({
+    fireStore.doc("$tnglJam $noHp").set({
       "status": status,
+      "updateBy": emailAdmin,
       "tanggal+jam": tnglJam,
       "nama": nama,
       "noHp": noHp,
@@ -117,6 +116,8 @@ class FirebaseService {
       "jumlahKm": jumlahKm,
       "gambarNama": gambarNama,
       "gambarUrl": gambarUrl,
+      "komentar": "Belum ada komentar",
+      "rating": "Belum ada rating",
       "createTime":
           DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
     });
@@ -128,9 +129,8 @@ class FirebaseService {
     fireStore.doc("$tnglJam $noHP").delete();
   }
 
-  postFixedBookingToFirestore(
+  postJadwalServisToFirestore(
       {required String tanggaljam,
-      required String accBy,
       required String gambarNama,
       required String gambarUrl,
       required String jenisServis,
@@ -138,11 +138,11 @@ class FirebaseService {
       required String nama,
       required String noHp,
       required String noPolisi,
+      required String emailAdmin,
       required String tipeMotor}) async {
     CollectionReference fireStore =
-        FirebaseFirestore.instance.collection("fixedBooking");
+        FirebaseFirestore.instance.collection("jadwalServis");
     fireStore.doc("$tanggaljam $noHp").set({
-      "accBy": accBy,
       "gambarNama": gambarNama,
       "gambarUrl": gambarUrl,
       "jenisServis": jenisServis,
@@ -152,6 +152,49 @@ class FirebaseService {
       "noPolisi": noPolisi,
       "tanggal+jam": tanggaljam,
       "tipeMotor": tipeMotor,
+      "komentar": "Belum ada komentar",
+      "status": "Booking diterima",
+      "rating": "Belum ada rating",
+      "updateBy": emailAdmin,
+      "createTime":
+          DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
+    });
+  }
+
+  deleteJadwalServisToFirebase(
+      {required String tnglJam, required String noHP}) {
+    CollectionReference fireStore =
+        FirebaseFirestore.instance.collection('jadwalServis');
+    fireStore.doc("$tnglJam $noHP").delete();
+  }
+
+  updateStatusLogBooking({
+    required String tanggaljam,
+    required String status,
+    required String noHp,
+  }) async {
+    CollectionReference fireStore =
+        FirebaseFirestore.instance.collection("logBooking");
+    fireStore.doc("$tanggaljam $noHp").update({
+      "status": status,
+      "createTime":
+          DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
+    });
+  }
+
+  updateReviewLogBooking({
+    required String tanggaljam,
+    required String noHp,
+    required String rating,
+    required String komentar,
+  }) async {
+    CollectionReference fireStore =
+        FirebaseFirestore.instance.collection("logBooking");
+    fireStore.doc("$tanggaljam $noHp").update({
+      "rating": rating,
+      "komentar": komentar,
+      "createTime":
+          DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
     });
   }
 }

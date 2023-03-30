@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:service_booking_system/widget/custom_button.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LogBookingPage extends StatefulWidget {
   const LogBookingPage({super.key});
@@ -84,8 +82,10 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
           String storageJenisServis = itemsList["jenisServis"];
           String storageJumlahKm = itemsList["jumlahKm"];
           String storageStatus = itemsList["status"];
-          String storageGambarNama = itemsList["gambarNama"];
+          String storageUpdateBy = itemsList["updateBy"];
           String storageGambarUrl = itemsList["gambarUrl"];
+          String storageRating = itemsList["rating"];
+          String storageKomentar = itemsList["komentar"];
 
           return Column(
               // padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -99,8 +99,8 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                           Row(
                             children: [
                               const Expanded(flex: 2, child: Text("Tgl/Jam")),
-                              Expanded(
-                                  flex: 5, child: Text(": $storageTanggal")),
+                              const Text(": "),
+                              Expanded(flex: 5, child: Text(storageTanggal)),
                             ],
                           ),
                           role == "Admin"
@@ -108,8 +108,8 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                                   children: [
                                     const Expanded(
                                         flex: 2, child: Text("Nama")),
-                                    Expanded(
-                                        flex: 5, child: Text(": $storageNama")),
+                                    const Text(": "),
+                                    Expanded(flex: 5, child: Text(storageNama)),
                                   ],
                                 )
                               : const SizedBox(),
@@ -118,8 +118,8 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                                   children: [
                                     const Expanded(
                                         flex: 2, child: Text("No HP")),
-                                    Expanded(
-                                        flex: 5, child: Text(": $storageNoHP")),
+                                    const Text(": "),
+                                    Expanded(flex: 5, child: Text(storageNoHP)),
                                   ],
                                 )
                               : const SizedBox(),
@@ -127,8 +127,8 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                             children: [
                               const Expanded(
                                   flex: 2, child: Text("Tipe Motor")),
-                              Expanded(
-                                  flex: 5, child: Text(": $storageTipeMotor")),
+                              const Text(": "),
+                              Expanded(flex: 5, child: Text(storageTipeMotor)),
                             ],
                           ),
                           role == "Admin"
@@ -136,9 +136,9 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                                   children: [
                                     const Expanded(
                                         flex: 2, child: Text("No Polisi")),
+                                    const Text(": "),
                                     Expanded(
-                                        flex: 5,
-                                        child: Text(": $storageNoPolisi")),
+                                        flex: 5, child: Text(storageNoPolisi)),
                                   ],
                                 )
                               : const SizedBox(),
@@ -146,9 +146,9 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                             children: [
                               const Expanded(
                                   flex: 2, child: Text("Jenis Servis")),
+                              const Text(": "),
                               Expanded(
-                                  flex: 5,
-                                  child: Text(": $storageJenisServis")),
+                                  flex: 5, child: Text(storageJenisServis)),
                             ],
                           ),
                           role == "Admin"
@@ -156,9 +156,31 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                                   children: [
                                     const Expanded(
                                         flex: 2, child: Text("Jumlah Km")),
+                                    const Text(": "),
                                     Expanded(
-                                        flex: 5,
-                                        child: Text(": $storageJumlahKm")),
+                                        flex: 5, child: Text(storageJumlahKm)),
+                                  ],
+                                )
+                              : const SizedBox(),
+                          role == "Admin"
+                              ? Row(
+                                  children: [
+                                    const Expanded(
+                                        flex: 2, child: Text("Rating")),
+                                    const Text(": "),
+                                    Expanded(
+                                        flex: 5, child: Text(storageRating)),
+                                  ],
+                                )
+                              : const SizedBox(),
+                          role == "Admin"
+                              ? Row(
+                                  children: [
+                                    const Expanded(
+                                        flex: 2, child: Text("Komentar")),
+                                    const Text(": "),
+                                    Expanded(
+                                        flex: 5, child: Text(storageKomentar)),
                                   ],
                                 )
                               : const SizedBox(),
@@ -167,9 +189,20 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                                   children: [
                                     const Expanded(
                                         flex: 2, child: Text("Status")),
+                                    const Text(": "),
                                     Expanded(
-                                        flex: 5,
-                                        child: Text(": $storageStatus")),
+                                        flex: 5, child: Text(storageStatus)),
+                                  ],
+                                )
+                              : const SizedBox(),
+                          role == "Admin"
+                              ? Row(
+                                  children: [
+                                    const Expanded(
+                                        flex: 2, child: Text("Update by")),
+                                    const Text(": "),
+                                    Expanded(
+                                        flex: 5, child: Text(storageUpdateBy)),
                                   ],
                                 )
                               : const SizedBox(),
@@ -198,16 +231,16 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                                             ],
                                           ),
                                         ),
-                                        actions: <Widget>[],
+                                        actions: const <Widget>[],
                                       );
                                     },
                                   );
                                 },
                                 child: Container(
-                                  child: Image.network(storageGambarUrl,
-                                      fit: BoxFit.cover),
                                   height: 160,
                                   color: Colors.green,
+                                  child: Image.network(storageGambarUrl,
+                                      fit: BoxFit.cover),
                                 ),
                               )
                             : const SizedBox())

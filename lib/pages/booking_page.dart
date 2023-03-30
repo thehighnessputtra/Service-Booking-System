@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, duplicate_ignore
+
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -10,7 +12,6 @@ import 'package:service_booking_system/widget/custom_button.dart';
 import 'package:service_booking_system/widget/custom_notification.dart';
 import 'package:service_booking_system/widget/custom_textformfield.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class BookingPage extends StatefulWidget {
   const BookingPage({super.key});
@@ -49,7 +50,7 @@ class _BookingPageState extends State<BookingPage> {
 
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       dialogInfoWithoutDelay(context,
           "Pastikan sebelum booking sudah melihat List booking dan Jadwal servis. Serta mengajukan Tanggal dan Jam yang berbeda untuk menghindari PENOLAKAN Booking!");
     });
@@ -263,6 +264,7 @@ class _BookingPageState extends State<BookingPage> {
                     if (fotoNama == "Masukan Gambar Motor") {
                       return "Masukan foto motor anda!";
                     }
+                    return null;
                   },
                   formNama: "Gambar Motor",
                   onTap: () {
@@ -313,7 +315,7 @@ class _BookingPageState extends State<BookingPage> {
                                               Expanded(
                                                   flex: 3,
                                                   child: Text(
-                                                      ": ${DateFormat("EEEE, d-MMMM-y", "ID").format(selectedDate)} / ${valueJamKerja}"))
+                                                      ": ${DateFormat("EEEE, d-MMMM-y", "ID").format(selectedDate)} / $valueJamKerja"))
                                             ],
                                           ),
                                           Row(
@@ -383,7 +385,7 @@ class _BookingPageState extends State<BookingPage> {
                                               Expanded(
                                                   flex: 3,
                                                   child: Text(
-                                                      ": ${valueJenisServis}"))
+                                                      ": $valueJenisServis"))
                                             ],
                                           ),
                                           Row(
@@ -475,8 +477,8 @@ class _BookingPageState extends State<BookingPage> {
                                                                 controllerTipeMotor
                                                                     .text);
                                                     Future.delayed(
-                                                        Duration(seconds: 1),
-                                                        () {
+                                                        const Duration(
+                                                            seconds: 1), () {
                                                       dialogInfo(
                                                           context,
                                                           "Berhasil booking!",
@@ -484,8 +486,8 @@ class _BookingPageState extends State<BookingPage> {
                                                     });
 
                                                     Future.delayed(
-                                                        Duration(seconds: 3),
-                                                        () {
+                                                        const Duration(
+                                                            seconds: 3), () {
                                                       Navigator.pop(context);
                                                     });
                                                   }
