@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController controllerNoHP = TextEditingController();
   TextEditingController controllerKomentar = TextEditingController();
-  double ratingReview = 1.0;
+  double ratingReview = 3.0;
   DateTime selectedDate = DateTime.now();
   int calcDate = DateTime.now().millisecondsSinceEpoch + 86400000;
   String fotoNama = "Masukan Gambar Motor";
