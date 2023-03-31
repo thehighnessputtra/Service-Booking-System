@@ -60,7 +60,7 @@ class FirebaseService {
   }
 
   postListBookingToFirestore(
-      {required String tnglJam,
+      {required DateTime tnglJam,
       required String nama,
       required String noHp,
       required String tipeMotor,

@@ -460,7 +460,7 @@ class _BookingPageState extends State<BookingPage> {
                                                                 fotoNama,
                                                             gambarUrl: fotoUrl!,
                                                             tnglJam:
-                                                                "${DateFormat("d-MMMM-y", "ID").format(selectedDate)} $valueJamKerja",
+                                                                selectedDate,
                                                             jenisServis:
                                                                 valueJenisServis,
                                                             jumlahKm:

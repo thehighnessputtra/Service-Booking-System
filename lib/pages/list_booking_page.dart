@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:service_booking_system/pages/log_booking_page.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
@@ -63,8 +64,10 @@ class _BookedPageState extends State<BookedPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: StreamBuilder(
-          stream:
-              FirebaseFirestore.instance.collection('listBooking').snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection('listBooking')
+              .orderBy('tanggal+jam')
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return HasilBooking(
@@ -118,7 +121,8 @@ class _HasilBookingState extends State<HasilBooking> {
       itemCount: widget.listHasilBooking.length,
       itemBuilder: (context, index) {
         final itemsList = widget.listHasilBooking[index];
-        String storageTanggal = itemsList["tanggal+jam"];
+        // String storageTanggal = itemsList["tanggal+jam"];
+        Timestamp storageTanggal = itemsList["tanggal+jam"];
         String storageNama = itemsList["nama"];
         String storageNoHP = itemsList["noHp"];
         String storageTipeMotor = itemsList["tipeMotor"];
@@ -142,7 +146,10 @@ class _HasilBookingState extends State<HasilBooking> {
                         Row(
                           children: [
                             const Expanded(flex: 2, child: Text("Tgl/Jam")),
-                            Expanded(flex: 5, child: Text(": $storageTanggal")),
+                            Expanded(
+                                flex: 5,
+                                child: Text(
+                                    ": ${DateFormat("EEEE, d-MMMM-y H-m", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))}")),
                           ],
                         ),
                         Row(
@@ -325,68 +332,68 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                     );
                                                                   },
                                                                 );
-                                                                FirebaseService(FirebaseAuth.instance).postJadwalServisToFirestore(
-                                                                    emailAdmin:
-                                                                        email!,
-                                                                    gambarNama:
-                                                                        storageGambarNama,
-                                                                    gambarUrl:
-                                                                        storageGambarUrl,
-                                                                    jenisServis:
-                                                                        storageJenisServis,
-                                                                    jumlahKm:
-                                                                        storageJumlahKm,
-                                                                    nama:
-                                                                        storageNama,
-                                                                    noHp:
-                                                                        storageNoHP,
-                                                                    noPolisi:
-                                                                        storageNoPolisi,
-                                                                    tanggaljam:
-                                                                        storageTanggal,
-                                                                    tipeMotor:
-                                                                        storageTipeMotor);
-                                                                Future.delayed(
-                                                                    const Duration(
-                                                                        seconds:
-                                                                            1),
-                                                                    () {
-                                                                  FirebaseService(
-                                                                          FirebaseAuth
-                                                                              .instance)
-                                                                      .postLogBookingToFireStore(
-                                                                    emailAdmin:
-                                                                        email!,
-                                                                    gambarNama:
-                                                                        storageGambarNama,
-                                                                    gambarUrl:
-                                                                        storageGambarUrl,
-                                                                    jenisServis:
-                                                                        storageJenisServis,
-                                                                    jumlahKm:
-                                                                        storageJumlahKm,
-                                                                    nama:
-                                                                        storageNama,
-                                                                    status:
-                                                                        "Servis diterima",
-                                                                    noHp:
-                                                                        storageNoHP,
-                                                                    noPolisi:
-                                                                        storageNoPolisi,
-                                                                    tipeMotor:
-                                                                        storageTipeMotor,
-                                                                    tnglJam:
-                                                                        storageTanggal,
-                                                                  );
-                                                                  FirebaseService(
-                                                                          FirebaseAuth
-                                                                              .instance)
-                                                                      .deleteListBookingToFirebase(
-                                                                          tnglJam:
-                                                                              storageTanggal,
-                                                                          noHP:
-                                                                              storageNoHP);
-                                                                });
+                                                                // FirebaseService(FirebaseAuth.instance).postJadwalServisToFirestore(
+                                                                //     emailAdmin:
+                                                                //         email!,
+                                                                //     gambarNama:
+                                                                //         storageGambarNama,
+                                                                //     gambarUrl:
+                                                                //         storageGambarUrl,
+                                                                //     jenisServis:
+                                                                //         storageJenisServis,
+                                                                //     jumlahKm:
+                                                                //         storageJumlahKm,
+                                                                //     nama:
+                                                                //         storageNama,
+                                                                //     noHp:
+                                                                //         storageNoHP,
+                                                                //     noPolisi:
+                                                                //         storageNoPolisi,
+                                                                //     tanggaljam:
+                                                                //         storageTanggal,
+                                                                //     tipeMotor:
+                                                                //         storageTipeMotor);
+                                                                // Future.delayed(
+                                                                //     const Duration(
+                                                                //         seconds:
+                                                                //             1),
+                                                                //     () {
+                                                                //   FirebaseService(
+                                                                //           FirebaseAuth
+                                                                //               .instance)
+                                                                //       .postLogBookingToFireStore(
+                                                                //     emailAdmin:
+                                                                //         email!,
+                                                                //     gambarNama:
+                                                                //         storageGambarNama,
+                                                                //     gambarUrl:
+                                                                //         storageGambarUrl,
+                                                                //     jenisServis:
+                                                                //         storageJenisServis,
+                                                                //     jumlahKm:
+                                                                //         storageJumlahKm,
+                                                                //     nama:
+                                                                //         storageNama,
+                                                                //     status:
+                                                                //         "Servis diterima",
+                                                                //     noHp:
+                                                                //         storageNoHP,
+                                                                //     noPolisi:
+                                                                //         storageNoPolisi,
+                                                                //     tipeMotor:
+                                                                //         storageTipeMotor,
+                                                                //     tnglJam:
+                                                                //         storageTanggal,
+                                                                //   );
+                                                                //   FirebaseService(
+                                                                //           FirebaseAuth
+                                                                //               .instance)
+                                                                //       .deleteListBookingToFirebase(
+                                                                //           tnglJam:
+                                                                //               storageTanggal,
+                                                                //           noHP:
+                                                                //               storageNoHP);
+                                                                // });
                                                                 Navigator.pop(
                                                                     context);
                                                               },
@@ -516,47 +523,47 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                   },
                                                                 );
 
-                                                                Future.delayed(
-                                                                    const Duration(
-                                                                        seconds:
-                                                                            1),
-                                                                    () {
-                                                                  FirebaseService(
-                                                                          FirebaseAuth
-                                                                              .instance)
-                                                                      .postLogBookingToFireStore(
-                                                                    emailAdmin:
-                                                                        email!,
-                                                                    gambarNama:
-                                                                        storageGambarNama,
-                                                                    gambarUrl:
-                                                                        storageGambarUrl,
-                                                                    jenisServis:
-                                                                        storageJenisServis,
-                                                                    jumlahKm:
-                                                                        storageJumlahKm,
-                                                                    nama:
-                                                                        storageNama,
-                                                                    status:
-                                                                        "DITOLAK",
-                                                                    noHp:
-                                                                        storageNoHP,
-                                                                    noPolisi:
-                                                                        storageNoPolisi,
-                                                                    tipeMotor:
-                                                                        storageTipeMotor,
-                                                                    tnglJam:
-                                                                        storageTanggal,
-                                                                  );
-                                                                  FirebaseService(
-                                                                          FirebaseAuth
-                                                                              .instance)
-                                                                      .deleteListBookingToFirebase(
-                                                                          tnglJam:
-                                                                              storageTanggal,
-                                                                          noHP:
-                                                                              storageNoHP);
-                                                                });
+                                                                // Future.delayed(
+                                                                //     const Duration(
+                                                                //         seconds:
+                                                                //             1),
+                                                                //     () {
+                                                                //   FirebaseService(
+                                                                //           FirebaseAuth
+                                                                //               .instance)
+                                                                //       .postLogBookingToFireStore(
+                                                                //     emailAdmin:
+                                                                //         email!,
+                                                                //     gambarNama:
+                                                                //         storageGambarNama,
+                                                                //     gambarUrl:
+                                                                //         storageGambarUrl,
+                                                                //     jenisServis:
+                                                                //         storageJenisServis,
+                                                                //     jumlahKm:
+                                                                //         storageJumlahKm,
+                                                                //     nama:
+                                                                //         storageNama,
+                                                                //     status:
+                                                                //         "DITOLAK",
+                                                                //     noHp:
+                                                                //         storageNoHP,
+                                                                //     noPolisi:
+                                                                //         storageNoPolisi,
+                                                                //     tipeMotor:
+                                                                //         storageTipeMotor,
+                                                                //     tnglJam:
+                                                                //         storageTanggal,
+                                                                //   );
+                                                                //   FirebaseService(
+                                                                //           FirebaseAuth
+                                                                //               .instance)
+                                                                //       .deleteListBookingToFirebase(
+                                                                //           tnglJam:
+                                                                //               storageTanggal,
+                                                                //           noHP:
+                                                                //               storageNoHP);
+                                                                // });
                                                                 Navigator.pop(
                                                                     context);
                                                               },
