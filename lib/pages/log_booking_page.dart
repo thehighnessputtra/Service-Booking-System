@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class LogBookingPage extends StatefulWidget {
   const LogBookingPage({super.key});
@@ -19,8 +20,10 @@ class _LogBookingPageState extends State<LogBookingPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: StreamBuilder(
-          stream:
-              FirebaseFirestore.instance.collection('logBooking').snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection('logBooking')
+              .orderBy("tanggal", descending: true)
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListLogBookingPage(
@@ -74,7 +77,8 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
         itemCount: widget.listHasilBooking.length,
         itemBuilder: (context, index) {
           final itemsList = widget.listHasilBooking[index];
-          String storageTanggal = itemsList["tanggal+jam"];
+          Timestamp storageTanggal = itemsList["tanggal"];
+          String storageJam = itemsList["jam"];
           String storageNama = itemsList["nama"];
           String storageNoHP = itemsList["noHp"];
           String storageTipeMotor = itemsList["tipeMotor"];
@@ -100,7 +104,10 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                             children: [
                               const Expanded(flex: 2, child: Text("Tgl/Jam")),
                               const Text(": "),
-                              Expanded(flex: 5, child: Text(storageTanggal)),
+                              Expanded(
+                                  flex: 5,
+                                  child: Text(
+                                      "${DateFormat("EEEE, d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} / $storageJam")),
                             ],
                           ),
                           role == "Admin"

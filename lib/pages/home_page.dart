@@ -10,6 +10,7 @@ import 'package:service_booking_system/pages/review_service.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/utils/constant.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
+import 'package:service_booking_system/widget/custom_notification.dart';
 import 'package:service_booking_system/widget/custom_textformfield.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -44,6 +45,8 @@ class _HomePageState extends State<HomePage> {
   String? role;
   int buttonServis = 0;
   int buttonApk = 1;
+  String emailOwner = "prayogidwicahyoputra@gmail.com";
+  String noHpOwner = "89652366540";
 
   Future getAcc() async {
     await FirebaseFirestore.instance
@@ -69,34 +72,39 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: role == "Admin"
-            ? const Text("Beranda - Admin")
-            : const Text("Beranda"),
-        actions: [
-          email == null
-              ? IconButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
-                    );
-                  },
-                  icon: const Icon(Icons.login))
-              : IconButton(
-                  onPressed: () {
-                    FirebaseService(FirebaseAuth.instance).signOut(context);
-                  },
-                  icon: const Icon(Icons.logout))
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        child: SingleChildScrollView(
-          child: Column(
+        appBar: AppBar(
+          title: role == "Admin"
+              ? const Text("Beranda - Admin")
+              : const Text("Beranda"),
+          actions: [
+            email == null
+                ? IconButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
+                      );
+                    },
+                    icon: const Icon(Icons.login))
+                : IconButton(
+                    onPressed: () {
+                      FirebaseService(FirebaseAuth.instance).signOut(context);
+                    },
+                    icon: const Icon(Icons.logout))
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 5,
+          ),
+          child: SingleChildScrollView(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(
+                height: 10.0,
+              ),
               Center(
                   child: Text(
                 "Service Booking System",
@@ -206,10 +214,8 @@ class _HomePageState extends State<HomePage> {
                                   ? kontak()
                                   : const Text("ERROR")),
             ],
-          ),
-        ),
-      ),
-    );
+          )),
+        ));
   }
 
   tentangKami() {
@@ -527,12 +533,13 @@ class _HomePageState extends State<HomePage> {
                                     onPressed: () {
                                       FirebaseService(FirebaseAuth.instance)
                                           .updateReviewLogBooking(
-                                              tanggaljam:
-                                                  "${DateFormat("d-MMMM-y", "ID").format(selectedDate)} $valueJamKerja",
-                                              noHp: controllerNoHP.text,
+                                              title:
+                                                  "${DateFormat("d-MMMM-y", "ID").format(selectedDate)} $valueJamKerja ${controllerNoHP.text}",
                                               rating: ratingReview.toString(),
                                               komentar:
                                                   controllerKomentar.text);
+                                      dialogInfo(context,
+                                          "Review berhasil diberikan", 2);
                                     },
                                     child: const Text("Yes"),
                                   ),
@@ -555,7 +562,10 @@ class _HomePageState extends State<HomePage> {
 
   review() {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('logBooking').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('logBooking')
+          .orderBy("rating", descending: true)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListReviewService(
@@ -570,15 +580,15 @@ class _HomePageState extends State<HomePage> {
   kontak() {
     return Column(children: [
       Row(
-        children: const [
-          Expanded(flex: 1, child: Text("Email")),
-          Expanded(flex: 3, child: Text(": emailmu@gmail.com")),
+        children: [
+          const Expanded(flex: 1, child: Text("Email")),
+          Expanded(flex: 3, child: Text(": $emailOwner")),
         ],
       ),
       Row(
-        children: const [
-          Expanded(flex: 1, child: Text("No. Handphone")),
-          Expanded(flex: 3, child: Text(": 08XXXXXXXXXX")),
+        children: [
+          const Expanded(flex: 1, child: Text("No. Handphone")),
+          Expanded(flex: 3, child: Text(": 0$noHpOwner")),
         ],
       ),
       const SizedBox(
@@ -588,7 +598,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           GestureDetector(
             onTap: () async {
-              final Uri url = Uri.parse("mailto:emailmu@gmail.com");
+              final Uri url = Uri.parse("mailto:$emailOwner");
               if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                 throw "Could not launch $url";
               }
@@ -614,7 +624,7 @@ class _HomePageState extends State<HomePage> {
           ),
           GestureDetector(
             onTap: () async {
-              final Uri url = Uri.parse("https://wa.me/628");
+              final Uri url = Uri.parse("https://wa.me/62$noHpOwner");
               if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                 throw "Could not launch $url";
               }

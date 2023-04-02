@@ -3,8 +3,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
+import 'package:service_booking_system/widget/custom_notification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class JadwalServisPage extends StatefulWidget {
@@ -24,8 +26,10 @@ class _JadwalServisPageState extends State<JadwalServisPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: StreamBuilder(
-          stream:
-              FirebaseFirestore.instance.collection('jadwalServis').snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection('jadwalServis')
+              .orderBy('tanggal')
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListJadwalServisPage(
@@ -79,7 +83,8 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
         itemCount: widget.listHasilBooking.length,
         itemBuilder: (context, index) {
           final itemsList = widget.listHasilBooking[index];
-          String storageTanggal = itemsList["tanggal+jam"];
+          Timestamp storageTanggal = itemsList["tanggal"];
+          String storageJam = itemsList["jam"];
           String storageNama = itemsList["nama"];
           String storageNoHP = itemsList["noHp"];
           String storageTipeMotor = itemsList["tipeMotor"];
@@ -103,7 +108,9 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                             children: [
                               const Expanded(flex: 2, child: Text("Tgl/Jam")),
                               Expanded(
-                                  flex: 5, child: Text(": $storageTanggal")),
+                                  flex: 5,
+                                  child: Text(
+                                      ": ${DateFormat("EEEE, d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} / $storageJam")),
                             ],
                           ),
                           Row(
@@ -189,7 +196,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                             onPress: () async {
                                               if (storageNoHP != null) {
                                                 final Uri url = Uri.parse(
-                                                    "https://wa.me/$storageNoHP");
+                                                    "https://api.whatsapp.com/send?phone=$storageNoHP&text=Halo%20$storageNama");
                                                 if (!await launchUrl(url,
                                                     mode: LaunchMode
                                                         .externalApplication)) {
@@ -208,18 +215,110 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                         CustomButton3(
                                             btnName: "SELESAI",
                                             onPress: () async {
-                                              FirebaseService(
-                                                      FirebaseAuth.instance)
-                                                  .updateStatusLogBooking(
-                                                      tanggaljam:
-                                                          storageTanggal,
-                                                      status: "Servis selesai",
-                                                      noHp: storageNoHP);
-                                              FirebaseService(
-                                                      FirebaseAuth.instance)
-                                                  .deleteJadwalServisToFirebase(
-                                                noHP: storageNoHP,
-                                                tnglJam: storageTanggal,
+                                              await showModalBottomSheet<void>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            30.0),
+                                                    child: Wrap(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: <Widget>[
+                                                              const Text(
+                                                                "KONFIRMASI SERVIS",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize:
+                                                                      16.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 20.0,
+                                                              ),
+                                                              Text(
+                                                                'Apakah yakin ingin menyelesaikan servis dari $storageNama?',
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 20.0,
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  ElevatedButton(
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .grey[600],
+                                                                    ),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    child:
+                                                                        const Text(
+                                                                            "No"),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    width: 10.0,
+                                                                  ),
+                                                                  ElevatedButton(
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .blueGrey,
+                                                                    ),
+                                                                    onPressed:
+                                                                        () {
+                                                                      FirebaseService(
+                                                                              FirebaseAuth.instance)
+                                                                          .updateStatusLogBooking(
+                                                                        title:
+                                                                            "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                        status:
+                                                                            "Servis selesai",
+                                                                      );
+                                                                      FirebaseService(
+                                                                              FirebaseAuth.instance)
+                                                                          .deleteJadwalServisToFirebase(
+                                                                        title:
+                                                                            "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                      );
+                                                                      dialogInfo(
+                                                                          context,
+                                                                          "Servis $storageNama telah selesai!",
+                                                                          2);
+                                                                    },
+                                                                    child: const Text(
+                                                                        "Yes"),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
                                               );
                                             }),
                                         const SizedBox(
@@ -228,18 +327,108 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                         CustomButton2(
                                             btnName: "CANCEL",
                                             onPress: () async {
-                                              FirebaseService(
-                                                      FirebaseAuth.instance)
-                                                  .updateStatusLogBooking(
-                                                      tanggaljam:
-                                                          storageTanggal,
-                                                      status: "Servis cancel",
-                                                      noHp: storageNoHP);
-                                              FirebaseService(
-                                                      FirebaseAuth.instance)
-                                                  .deleteJadwalServisToFirebase(
-                                                noHP: storageNoHP,
-                                                tnglJam: storageTanggal,
+                                              await showModalBottomSheet<void>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            30.0),
+                                                    child: Wrap(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: <Widget>[
+                                                              const Text(
+                                                                "KONFIRMASI SERVIS",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize:
+                                                                      16.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 20.0,
+                                                              ),
+                                                              Text(
+                                                                'Apakah yakin ingin cancel servis dari $storageNama?',
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 20.0,
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  ElevatedButton(
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .grey[600],
+                                                                    ),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    child:
+                                                                        const Text(
+                                                                            "No"),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    width: 10.0,
+                                                                  ),
+                                                                  ElevatedButton(
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .blueGrey,
+                                                                    ),
+                                                                    onPressed:
+                                                                        () {
+                                                                      FirebaseService(
+                                                                              FirebaseAuth.instance)
+                                                                          .updateStatusLogBooking(
+                                                                        title:
+                                                                            "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                        status:
+                                                                            "Servis cancel",
+                                                                      );
+                                                                      FirebaseService(
+                                                                              FirebaseAuth.instance)
+                                                                          .deleteJadwalServisToFirebase(
+                                                                        title:
+                                                                            "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                      );
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    child: const Text(
+                                                                        "Yes"),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
                                               );
                                             }),
                                       ],

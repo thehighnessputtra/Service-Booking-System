@@ -16,6 +16,7 @@ class _ListReviewServiceState extends State<ListReviewService> {
     return SizedBox(
       height: 100 * widget.listHasilBooking.length.toDouble(),
       child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
           // itemCount: 1,
           itemCount: widget.listHasilBooking.length,
           itemBuilder: (context, index) {
