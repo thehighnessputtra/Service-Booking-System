@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -64,7 +65,7 @@ class FirebaseService {
       required String title,
       required String nama,
       required String jam,
-      required String noHp,
+      required int noHp,
       required String tipeMotor,
       required String noPolisi,
       required String jenisServis,
@@ -97,7 +98,7 @@ class FirebaseService {
     required String jam,
     required String nama,
     required DateTime tanggal,
-    required String noHp,
+    required int noHp,
     required String tipeMotor,
     required String noPolisi,
     required String jenisServis,
@@ -144,7 +145,7 @@ class FirebaseService {
       required String nama,
       required String jam,
       required String title,
-      required String noHp,
+      required int noHp,
       required String noPolisi,
       required String emailAdmin,
       required String tipeMotor}) async {
@@ -190,32 +191,39 @@ class FirebaseService {
   }
 
   updateReviewLogBooking({
+    required BuildContext context,
     required String title,
     required String rating,
     required String komentar,
   }) async {
     CollectionReference fireStore =
         FirebaseFirestore.instance.collection("logBooking");
-    fireStore.doc(title).update({
-      "rating": rating,
-      "komentar": komentar,
-      "createTime":
-          DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
-    });
+    fireStore
+        .doc(title)
+        .update({
+          "rating": rating,
+          "komentar": komentar,
+          "createTime":
+              DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
+        })
+        .then((value) =>
+            dialogInfoWithoutDelay(context, "Review sukses diberikan!"))
+        .onError((error, stackTrace) => dialogInfoWithoutDelay(context,
+            "Review gagal diberikan!\n\nPastikan sudah memasukan tanggal, jam servis dan nomor yang sesuai dengan booking"));
   }
+}
 
-  updateTimeServices({
-    required String jam,
-    required int hitungJam,
-    required int hitungMontir,
-  }) async {
-    CollectionReference fireStore =
-        FirebaseFirestore.instance.collection("timeServices");
-    fireStore.doc("UFYfUtf5FW3sxPB2iCPg").update({
-      jam: hitungJam,
-      "montir": hitungMontir,
-      "updateTime":
-          DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
-    });
-  }
+updateTimeServices({
+  required String jam,
+  required int hitungJam,
+  required int hitungMontir,
+}) async {
+  CollectionReference fireStore =
+      FirebaseFirestore.instance.collection("timeServices");
+  fireStore.doc("UFYfUtf5FW3sxPB2iCPg").update({
+    jam: hitungJam,
+    "montir": hitungMontir,
+    "updateTime":
+        DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
+  });
 }

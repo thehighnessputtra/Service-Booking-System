@@ -475,14 +475,15 @@ class _BookingPageState extends State<BookingPage> {
                                                                   selectedDate,
                                                               jenisServis:
                                                                   valueJenisServis,
-                                                              jumlahKm: controllerJumlahKM
-                                                                  .text,
+                                                              jumlahKm:
+                                                                  controllerJumlahKM
+                                                                      .text,
                                                               nama:
                                                                   controllerNama
                                                                       .text,
-                                                              noHp:
+                                                              noHp: int.parse(
                                                                   controllerNoHP
-                                                                      .text,
+                                                                      .text),
                                                               noPolisi:
                                                                   controllerNoPolisi
                                                                       .text,

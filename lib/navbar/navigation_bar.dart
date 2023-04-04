@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:service_booking_system/pages/booking_page.dart';
-import 'package:service_booking_system/pages/home_page.dart';
-import 'package:service_booking_system/pages/jadwal_servis_page.dart';
-import 'package:service_booking_system/pages/list_booking_page.dart';
+import 'package:service_booking_system/pages/form_booking/booking_page.dart';
+import 'package:service_booking_system/pages/home/home_page.dart';
+import 'package:service_booking_system/pages/jadwal_servis/jadwal_servis_page.dart';
+import 'package:service_booking_system/pages/list_booking/list_booking_page.dart';
 
 class NavigationBarUI extends StatefulWidget {
   const NavigationBarUI({super.key});

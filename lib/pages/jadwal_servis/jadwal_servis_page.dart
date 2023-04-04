@@ -86,7 +86,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
           Timestamp storageTanggal = itemsList["tanggal"];
           String storageJam = itemsList["jam"];
           String storageNama = itemsList["nama"];
-          String storageNoHP = itemsList["noHp"];
+          int storageNoHP = itemsList["noHp"];
           String storageTipeMotor = itemsList["tipeMotor"];
           String storageNoPolisi = itemsList["noPolisi"];
           String storageJenisServis = itemsList["jenisServis"];
@@ -125,7 +125,8 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                     const Expanded(
                                         flex: 2, child: Text("No HP")),
                                     Expanded(
-                                        flex: 5, child: Text(": $storageNoHP")),
+                                        flex: 5,
+                                        child: Text(": 0$storageNoHP")),
                                   ],
                                 )
                               : const SizedBox(),
@@ -196,7 +197,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                             onPress: () async {
                                               if (storageNoHP != null) {
                                                 final Uri url = Uri.parse(
-                                                    "https://api.whatsapp.com/send?phone=$storageNoHP&text=Halo%20$storageNama");
+                                                    "https://api.whatsapp.com/send?phone=62$storageNoHP&text=Halo%20$storageNama");
                                                 if (!await launchUrl(url,
                                                     mode: LaunchMode
                                                         .externalApplication)) {
@@ -302,10 +303,10 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                                                         title:
                                                                             "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
                                                                       );
-                                                                      dialogInfo(
-                                                                          context,
-                                                                          "Servis $storageNama telah selesai!",
-                                                                          2);
+                                                                      dialogInfoWithoutDelay(
+                                                                        context,
+                                                                        "Servis $storageNama telah selesai!",
+                                                                      );
                                                                     },
                                                                     child: const Text(
                                                                         "Yes"),

@@ -80,7 +80,7 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
           Timestamp storageTanggal = itemsList["tanggal"];
           String storageJam = itemsList["jam"];
           String storageNama = itemsList["nama"];
-          String storageNoHP = itemsList["noHp"];
+          int storageNoHP = itemsList["noHp"];
           String storageTipeMotor = itemsList["tipeMotor"];
           String storageNoPolisi = itemsList["noPolisi"];
           String storageJenisServis = itemsList["jenisServis"];
@@ -126,7 +126,8 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                                     const Expanded(
                                         flex: 2, child: Text("No HP")),
                                     const Text(": "),
-                                    Expanded(flex: 5, child: Text(storageNoHP)),
+                                    Expanded(
+                                        flex: 5, child: Text("0$storageNoHP")),
                                   ],
                                 )
                               : const SizedBox(),
@@ -169,28 +170,20 @@ class _ListLogBookingPageState extends State<ListLogBookingPage> {
                                   ],
                                 )
                               : const SizedBox(),
-                          role == "Admin"
-                              ? Row(
-                                  children: [
-                                    const Expanded(
-                                        flex: 2, child: Text("Rating")),
-                                    const Text(": "),
-                                    Expanded(
-                                        flex: 5, child: Text(storageRating)),
-                                  ],
-                                )
-                              : const SizedBox(),
-                          role == "Admin"
-                              ? Row(
-                                  children: [
-                                    const Expanded(
-                                        flex: 2, child: Text("Komentar")),
-                                    const Text(": "),
-                                    Expanded(
-                                        flex: 5, child: Text(storageKomentar)),
-                                  ],
-                                )
-                              : const SizedBox(),
+                          Row(
+                            children: [
+                              const Expanded(flex: 2, child: Text("Rating")),
+                              const Text(": "),
+                              Expanded(flex: 5, child: Text(storageRating)),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Expanded(flex: 2, child: Text("Komentar")),
+                              const Text(": "),
+                              Expanded(flex: 5, child: Text(storageKomentar)),
+                            ],
+                          ),
                           role == "Admin"
                               ? Row(
                                   children: [

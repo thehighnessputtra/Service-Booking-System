@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:service_booking_system/pages/log_booking_page.dart';
+import 'package:service_booking_system/pages/list_booking/histori_servis.dart';
+import 'package:service_booking_system/pages/list_booking/log_booking_page.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
+import 'package:service_booking_system/widget/transition_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookedPage extends StatefulWidget {
@@ -48,17 +50,13 @@ class _BookedPageState extends State<BookedPage> {
       appBar: AppBar(
         title: const Text("List Booking"),
         actions: [
-          role == "Admin"
-              ? IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LogBookingPage()),
-                    );
-                  },
-                  icon: const Icon(Icons.history))
-              : const SizedBox(),
+          IconButton(
+              onPressed: () {
+                role == "Admin"
+                    ? navPushTransition(context, LogBookingPage())
+                    : navPushTransition(context, HistoriServis());
+              },
+              icon: const Icon(Icons.history))
         ],
       ),
       body: Padding(
@@ -125,7 +123,7 @@ class _HasilBookingState extends State<HasilBooking> {
           String storageJam = itemsList["jam"];
           Timestamp storageTanggal = itemsList["tanggal"];
           String storageNama = itemsList["nama"];
-          String storageNoHP = itemsList["noHp"];
+          int storageNoHP = itemsList["noHp"];
           String storageTipeMotor = itemsList["tipeMotor"];
           String storageNoPolisi = itemsList["noPolisi"];
           String storageJenisServis = itemsList["jenisServis"];
@@ -337,7 +335,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                                   btnName: "Chat WA",
                                                                                   onPress: () async {
                                                                                     if (storageNoHP != null) {
-                                                                                      final Uri url = Uri.parse("https://api.whatsapp.com/send?phone=$storageNoHP&text=Halo%20%$storageNama%2C%20booking%20kamu%20sudah%20kami%20terima.%20Silahkan%20cek%20Jadwal%20Servis%20pada%20aplikasi!");
+                                                                                      final Uri url = Uri.parse("https://api.whatsapp.com/send?phone=62$storageNoHP&text=Halo%20$storageNama%2C%20booking%20kamu%20sudah%20kami%20terima.%20Silahkan%20cek%20Jadwal%20Servis%20pada%20aplikasi!");
                                                                                       if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                                                                                         throw "Could not launch $url";
                                                                                       }
@@ -569,7 +567,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                                   btnName: "Chat WA",
                                                                                   onPress: () async {
                                                                                     if (storageNoHP != null) {
-                                                                                      final Uri url = Uri.parse("https://api.whatsapp.com/send?phone=$storageNoHP&text=Halo%20$storageNama%2C%20mohon%20maaf%20booking%20kamu%20sudah%20kami%20tolak%20karena%20jadwal%20kamu%20berbentrokan%20atau%20montir%20sedang%20tidak%20tersedia.");
+                                                                                      final Uri url = Uri.parse("https://api.whatsapp.com/send?phone=62$storageNoHP&text=Halo%20$storageNama%2C%20mohon%20maaf%20booking%20kamu%20sudah%20kami%20tolak%20karena%20jadwal%20kamu%20berbentrokan%20atau%20montir%20sedang%20tidak%20tersedia.");
                                                                                       if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                                                                                         throw "Could not launch $url";
                                                                                       }
