@@ -466,7 +466,7 @@ class _BookingPageState extends State<BookingPage> {
                                                               jam:
                                                                   valueJamKerja,
                                                               title:
-                                                                  "${DateFormat("d-MMMM-y", "ID").format(selectedDate)} $valueJamKerja ${controllerNoHP.text}",
+                                                                  "${DateFormat("d-MMMM-y", "ID").format(selectedDate)} $valueJamKerja ${int.parse(controllerNoHP.text)}",
                                                               gambarNama:
                                                                   fotoNama,
                                                               gambarUrl:
