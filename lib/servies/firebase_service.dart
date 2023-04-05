@@ -190,6 +190,37 @@ class FirebaseService {
     });
   }
 
+  postSelesaiServisToFirestore(
+      {required DateTime tanggal,
+      required String gambarNama,
+      required String gambarUrl,
+      required String jenisServis,
+      required String jumlahKm,
+      required String nama,
+      required String jam,
+      required int noHp,
+      required String noPolisi,
+      required String emailAdmin,
+      required String tipeMotor}) async {
+    CollectionReference fireStore =
+        FirebaseFirestore.instance.collection("selesaiServis");
+    fireStore.doc(DateTime.now().millisecondsSinceEpoch.toString()).set({
+      "gambarNama": gambarNama,
+      "gambarUrl": gambarUrl,
+      "jenisServis": jenisServis,
+      "jumlahKm": jumlahKm,
+      "nama": nama,
+      "noHp": noHp,
+      "noPolisi": noPolisi,
+      "tanggal": tanggal,
+      "jam": jam,
+      "tipeMotor": tipeMotor,
+      "status": "Servis selesai",
+      "updateBy": emailAdmin,
+      "createTime": DateTime.now().millisecondsSinceEpoch.toString(),
+    });
+  }
+
   updateReviewLogBooking({
     required BuildContext context,
     required String title,

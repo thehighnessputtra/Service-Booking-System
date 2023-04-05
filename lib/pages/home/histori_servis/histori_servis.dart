@@ -14,8 +14,9 @@ class HistoriServis extends StatelessWidget {
         title: Text("Histori Servis"),
       ),
       body: StreamBuilder(
-          stream:
-              FirebaseFirestore.instance.collection("logBooking").snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection("selesaiServis")
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -31,71 +32,54 @@ class HistoriServis extends StatelessWidget {
                   final storageJenisServis = data.get("jenisServis");
                   final storageTipeMotor = data.get("tipeMotor");
                   final storageStatus = data.get("status");
-                  final storageRating = data.get("rating");
-                  final storageKomentar = data.get("komentar");
-                  if (storageStatus == "Servis selesai") {
-                    return Column(
-                      children: [
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(flex: 2, child: Text("Status")),
-                            const Text(": "),
-                            Expanded(flex: 5, child: Text("$storageStatus")),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(flex: 2, child: Text("Tgl/Jam")),
-                            const Text(": "),
-                            Expanded(
-                                flex: 5,
-                                child: Text(
-                                    "${DateFormat("EEEE, d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} / $storageJam")),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(flex: 2, child: Text("Nama")),
-                            const Text(": "),
-                            Expanded(flex: 5, child: Text(storageNama)),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(flex: 2, child: Text("Tipe Motor")),
-                            const Text(": "),
-                            Expanded(flex: 5, child: Text(storageTipeMotor)),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(
-                                flex: 2, child: Text("Jenis Servis")),
-                            const Text(": "),
-                            Expanded(flex: 5, child: Text(storageJenisServis)),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(flex: 2, child: Text("Rating")),
-                            const Text(": "),
-                            Expanded(flex: 5, child: Text(storageRating)),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(flex: 2, child: Text("Komentar")),
-                            const Text(": "),
-                            Expanded(flex: 5, child: Text(storageKomentar)),
-                          ],
-                        ),
-                      ],
-                    );
-                  }
-                  return SizedBox();
+                  // if (storageStatus == "Servis selesai") {
+                  return Column(
+                    children: [
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(flex: 2, child: Text("Status")),
+                          const Text(": "),
+                          Expanded(flex: 5, child: Text("$storageStatus")),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(flex: 2, child: Text("Tgl/Jam")),
+                          const Text(": "),
+                          Expanded(
+                              flex: 5,
+                              child: Text(
+                                  "${DateFormat("EEEE, d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} / $storageJam")),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(flex: 2, child: Text("Nama")),
+                          const Text(": "),
+                          Expanded(flex: 5, child: Text(storageNama)),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(flex: 2, child: Text("Tipe Motor")),
+                          const Text(": "),
+                          Expanded(flex: 5, child: Text(storageTipeMotor)),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(flex: 2, child: Text("Jenis Servis")),
+                          const Text(": "),
+                          Expanded(flex: 5, child: Text(storageJenisServis)),
+                        ],
+                      ),
+                    ],
+                  );
+                  // }
+                  // return SizedBox();
                 },
               );
             }

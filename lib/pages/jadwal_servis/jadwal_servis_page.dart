@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:service_booking_system/pages/home/berikan_review/berikan_review_page.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
 import 'package:service_booking_system/widget/custom_notification.dart';
@@ -93,6 +94,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
           String storageJumlahKm = itemsList["jumlahKm"];
           String storageStatus = itemsList["status"];
           String storageGambarUrl = itemsList["gambarUrl"];
+          String storageGambarNama = itemsList["gambarNama"];
           String storageUpdateBy = itemsList["updateBy"];
 
           return Column(
@@ -289,6 +291,30 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                                                     ),
                                                                     onPressed:
                                                                         () {
+                                                                      FirebaseService(FirebaseAuth.instance).postSelesaiServisToFirestore(
+                                                                          gambarUrl:
+                                                                              storageGambarUrl,
+                                                                          gambarNama:
+                                                                              storageGambarNama,
+                                                                          emailAdmin:
+                                                                              email!,
+                                                                          nama:
+                                                                              storageNama,
+                                                                          jenisServis:
+                                                                              storageJenisServis,
+                                                                          jam:
+                                                                              storageJam,
+                                                                          noHp:
+                                                                              storageNoHP,
+                                                                          noPolisi:
+                                                                              storageNoPolisi,
+                                                                          jumlahKm:
+                                                                              storageJumlahKm,
+                                                                          tanggal: DateTime.parse(storageTanggal
+                                                                              .toDate()
+                                                                              .toString()),
+                                                                          tipeMotor:
+                                                                              storageTipeMotor);
                                                                       FirebaseService(
                                                                               FirebaseAuth.instance)
                                                                           .updateStatusLogBooking(
@@ -297,12 +323,12 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                                                         status:
                                                                             "Servis selesai",
                                                                       );
-                                                                      FirebaseService(
-                                                                              FirebaseAuth.instance)
-                                                                          .deleteJadwalServisToFirebase(
-                                                                        title:
-                                                                            "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
-                                                                      );
+                                                                      // FirebaseService(
+                                                                      //         FirebaseAuth.instance)
+                                                                      //     .deleteJadwalServisToFirebase(
+                                                                      //   title:
+                                                                      //       "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                      // );
                                                                       dialogInfoWithoutDelay(
                                                                         context,
                                                                         "Servis $storageNama telah selesai!",
