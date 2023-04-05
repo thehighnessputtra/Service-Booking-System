@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:service_booking_system/auth/login_page.dart';
+import 'package:service_booking_system/pages/home/berikan_review/berikan_review_page.dart';
 import 'package:service_booking_system/pages/home/cek_status_servis/cek_status_servis_page.dart';
 import 'package:service_booking_system/pages/home/review_service.dart';
+import 'package:service_booking_system/pages/home/histori_servis/histori_servis.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/utils/constant.dart';
+import 'package:service_booking_system/widget/card_widget.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
 import 'package:service_booking_system/widget/custom_notification.dart';
 import 'package:service_booking_system/widget/custom_textformfield.dart';
@@ -29,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   double ratingReview = 3.0;
   DateTime selectedDate = DateTime.now();
   int calcDate = DateTime.now().millisecondsSinceEpoch + 86400000;
+
   String fotoNama = "Masukan Gambar Motor";
   List listJenisServis = ["Servis Ringan", "Servis Besar"];
   String valueJenisServis = "";
@@ -46,6 +50,7 @@ class _HomePageState extends State<HomePage> {
   String? email;
   String? role;
   int buttonServis = 0;
+  int btnSort = 0;
   int buttonApk = 1;
   String emailOwner = "akbarmuliaardiansyah27@gmail.com";
   String noHpOwner = "85842635120";
@@ -111,67 +116,35 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10.0,
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     Column(
-            //       children: [
-            //         Container(
-            //           width: 90,
-            //           height: 70,
-            //           color: Colors.red.shade400,
-            //           child: IconButton(
-            //               onPressed: () {},
-            //               icon: const Icon(
-            //                 Icons.reviews,
-            //                 color: Colors.white,
-            //                 size: 40,
-            //               )),
-            //         ),
-            //         Container(
-            //             margin: EdgeInsets.only(bottom: 10),
-            //             width: 90,
-            //             height: 20,
-            //             color: Colors.red.shade400,
-            //             child: Center(child: Text("Berikan Review"))),
-            //       ],
-            //     ),
-            //     Column(
-            //       children: [
-            //         Container(
-            //           width: 90,
-            //           height: 70,
-            //           color: Colors.orangeAccent,
-            //           child: IconButton(
-            //               onPressed: () {},
-            //               icon: const Icon(
-            //                 Icons.history,
-            //                 color: Colors.white,
-            //                 size: 30,
-            //               )),
-            //         ),
-            //         Text("Histori Servis")
-            //       ],
-            //     ),
-            //     Column(
-            //       children: [
-            //         Container(
-            //           width: 90,
-            //           height: 70,
-            //           color: Colors.amber,
-            //           child: IconButton(
-            //               onPressed: () {},
-            //               icon: const Icon(
-            //                 Icons.search,
-            //                 color: Colors.white,
-            //                 size: 30,
-            //               )),
-            //         ),
-            //         Text("Cek Status Servis")
-            //       ],
-            //     ),
-            //   ],
-            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomCardWidget(
+                    border: BorderRadius.circular(12),
+                    icon: Icons.reviews,
+                    onTap: () {
+                      navPushTransition(context, const BerikanReviewPage());
+                    },
+                    color: Colors.green.shade500,
+                    text: "Berikan Review"),
+                CustomCardWidget(
+                    border: BorderRadius.circular(12),
+                    icon: Icons.history,
+                    onTap: () {
+                      navPushTransition(context, const HistoriServis());
+                    },
+                    color: Colors.green.shade900,
+                    text: "Histori Servis"),
+                CustomCardWidget(
+                    border: BorderRadius.circular(12),
+                    icon: Icons.search,
+                    onTap: () {
+                      navPushTransition(context, const CekStatusServisPage());
+                    },
+                    color: Colors.green.shade700,
+                    text: "Status Servis")
+              ],
+            ),
             const SizedBox(
               height: 30.0,
             ),
@@ -187,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                   child: const Text("Tentang Kami"),
                   style: ElevatedButton.styleFrom(
                       fixedSize:
-                          Size(MediaQuery.of(context).size.width / 4, 50),
+                          Size(MediaQuery.of(context).size.width / 3, 50),
                       backgroundColor: buttonApk == 1
                           ? Colors.lightGreen[400]
                           : Colors.lightGreen[700],
@@ -205,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                   child: const Text("Review"),
                   style: ElevatedButton.styleFrom(
                       fixedSize:
-                          Size(MediaQuery.of(context).size.width / 4, 50),
+                          Size(MediaQuery.of(context).size.width / 3, 50),
                       backgroundColor: buttonApk == 3
                           ? Colors.lightGreen[400]
                           : Colors.lightGreen[700],
@@ -221,30 +194,12 @@ class _HomePageState extends State<HomePage> {
                   child: const Text("Kontak"),
                   style: ElevatedButton.styleFrom(
                       fixedSize:
-                          Size(MediaQuery.of(context).size.width / 4, 50),
+                          Size(MediaQuery.of(context).size.width / 3, 50),
                       backgroundColor: buttonApk == 4
                           ? Colors.lightGreen[400]
                           : Colors.lightGreen[700],
                       elevation: 0,
                       shape: const ContinuousRectangleBorder()),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      buttonApk = 2;
-                    });
-                  },
-                  child: const Text("Berikan Review"),
-                  style: ElevatedButton.styleFrom(
-                      fixedSize:
-                          Size(MediaQuery.of(context).size.width / 4, 50),
-                      backgroundColor: buttonApk == 2
-                          ? Colors.lightGreen[400]
-                          : Colors.lightGreen[700],
-                      elevation: 0,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10)))),
                 ),
               ],
             ),
@@ -258,22 +213,11 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(10),
                 child: buttonApk == 1
                     ? tentangKami()
-                    : buttonApk == 2
-                        ? berikanReview()
-                        : buttonApk == 3
-                            ? review()
-                            : buttonApk == 4
-                                ? kontak()
-                                : const Text("ERROR")),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: CustomButton3(
-                btnName: "Cek Status Servis",
-                onPress: () {
-                  navPushTransition(context, const CekStatusServisPage());
-                },
-              ),
-            )
+                    : buttonApk == 3
+                        ? review()
+                        : buttonApk == 4
+                            ? kontak()
+                            : const Text("ERROR")),
           ],
         )));
   }
@@ -356,321 +300,83 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  berikanReview() {
+  review() {
     return Column(
       children: [
-        const Text(
-            "Silahkan isi Form Review dengan cara memasukan form sesuai dengan form booking sebelumnya",
-            textAlign: TextAlign.justify),
-        const SizedBox(
-          height: 10.0,
-        ),
-        CustomTextFormField(
-          hint: DateFormat("EEEE, d-MMMM-y", "ID").format(selectedDate),
-          formNama: "Tanggal",
-          readOnly: true,
-          onTap: () async {
-            DateTime? pickedDate = await showDatePicker(
-              context: context,
-              initialDate: DateTime.fromMillisecondsSinceEpoch(calcDate),
-              locale: const Locale("in", "ID"),
-              firstDate: DateTime.now(),
-              lastDate: DateTime(2040),
-            );
-            setState(() {
-              selectedDate = pickedDate!;
-            });
-          },
-        ),
-        const SizedBox(
-          height: 10.0,
-        ),
-        SizedBox(
-          height: 50,
-          child: DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              isDense: true,
-              labelStyle: TextStyle(color: Colors.black87),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.green)),
-              labelText: "Jam Servis",
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
-            isExpanded: true,
-            hint: Text(valueJamKerja),
-            validator: (value) {
-              if (valueJamKerja == "") {
-                return 'Jam Servis tidak boleh kosong!';
-              }
-              return null;
-            },
-            elevation: 0,
-            borderRadius: BorderRadius.circular(12),
-            onChanged: (value) {
-              setState(() {
-                valueJamKerja = value!;
-              });
-            },
-            items: listJamKerja
-                .map<DropdownMenuItem<String>>(
-                  (e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-        const SizedBox(
-          height: 10.0,
-        ),
-        CustomTextFormField(
-          formNama: "No Handphone",
-          hint: "08XXXXXXXXX",
-          keyboardType: TextInputType.number,
-          controller: controllerNoHP,
-          validasi: (value) {
-            if (value!.isEmpty) {
-              return "No Handphone tidak boleh kosong!";
-            }
-            return null;
-          },
-        ),
-        const SizedBox(
-          height: 5.0,
-        ),
-        RatingBar.builder(
-          initialRating: 3,
-          glow: false,
-          minRating: 1,
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemCount: 5,
-          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-          itemBuilder: (context, _) => const Icon(
-            Icons.star,
-            color: Colors.amber,
-          ),
-          onRatingUpdate: (rating) {
-            setState(() {
-              ratingReview = rating;
-            });
-          },
-        ),
-        Text(ratingReview.toString()),
-        const SizedBox(
-          height: 5.0,
-        ),
-        CustomTextFormField(
-          setHigh: true,
-          formNama: "Komentar",
-          hint: "Pelayanan sangat baik",
-          minLine: 3,
-          maxLine: 5,
-          height: 80,
-          controller: controllerKomentar,
-          validasi: (value) {
-            if (value!.isEmpty) {
-              return "No Handphone tidak boleh kosong!";
-            }
-            return null;
-          },
-        ),
-        SizedBox(
-          width: double.infinity,
-          child: CustomButton3(
-            btnName: "Kirim Review",
-            onPress: () async {
-              if (valueJamKerja.isEmpty && controllerNoHP.text.isEmpty) {
-                dialogInfoWithoutDelay(
-                    context, "Silahkan isi form terlebih dahulu!");
-              } else {
-                await showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return StreamBuilder(
-                        stream: FirebaseFirestore.instance
-                            .collection('logBooking')
-                            .doc(
-                                "${DateFormat("d-MMMM-y", "ID").format(selectedDate)} $valueJamKerja ${int.parse(controllerNoHP.text)}")
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            final status = snapshot.data!.get("status");
-                            return Container(
-                              padding: const EdgeInsets.all(30.0),
-                              child: Wrap(
-                                children: [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        const Text(
-                                          "KONFIRMASI REVIEW",
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20.0,
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                "Tgl/Jam",
-                                              ),
-                                            ),
-                                            const Text(
-                                              ":",
-                                            ),
-                                            Expanded(
-                                                flex: 3,
-                                                child: Text(
-                                                    "${DateFormat("EEEE, d-MMMM-y", "ID").format(selectedDate)} / $valueJamKerja"))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                "No HP",
-                                              ),
-                                            ),
-                                            const Text(
-                                              ":",
-                                            ),
-                                            Expanded(
-                                                flex: 3,
-                                                child:
-                                                    Text(controllerNoHP.text))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                "Rating",
-                                              ),
-                                            ),
-                                            const Text(
-                                              ":",
-                                            ),
-                                            Expanded(
-                                                flex: 3,
-                                                child: Text("$ratingReview"))
-                                          ],
-                                        ),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                "Komentar",
-                                              ),
-                                            ),
-                                            const Text(
-                                              ":",
-                                            ),
-                                            Expanded(
-                                                flex: 3,
-                                                child: Text(
-                                                    controllerKomentar.text))
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 20.0,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.grey[600],
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text("No"),
-                                            ),
-                                            const SizedBox(
-                                              width: 10.0,
-                                            ),
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.blueGrey,
-                                              ),
-                                              onPressed: () {
-                                                if (status ==
-                                                    "Servis selesai") {
-                                                  FirebaseService(
-                                                          FirebaseAuth.instance)
-                                                      .updateReviewLogBooking(
-                                                          context: context,
-                                                          title:
-                                                              "${DateFormat("d-MMMM-y", "ID").format(selectedDate)} $valueJamKerja ${int.parse(controllerNoHP.text)}",
-                                                          rating: ratingReview
-                                                              .toString(),
-                                                          komentar:
-                                                              controllerKomentar
-                                                                  .text);
-                                                } else {
-                                                  dialogInfoWithoutDelay(
-                                                      context,
-                                                      "Mohon maaf anda tidak bisa memberikan review, dikarenakan status anda $status");
-                                                }
-                                              },
-                                              child: const Text("Yes"),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else if (snapshot.error == true) {
-                            dialogInfoWithoutDelay(context, "text");
-                          }
-                          return const SizedBox();
-                        });
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              height: 30,
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (btnSort == 1) {
+                      setState(() {
+                        btnSort = 0;
+                      });
+                    } else {
+                      setState(() {
+                        btnSort = 1;
+                      });
+                    }
                   },
-                );
-              }
-            },
-          ),
-        )
+                  child: const Text("Tertinggi"),
+                  style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: btnSort == 1
+                          ? Colors.yellow[900]
+                          : Colors.yellow[700])),
+            ),
+            SizedBox(
+              height: 30,
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (btnSort == 2) {
+                      setState(() {
+                        btnSort = 0;
+                      });
+                    } else {
+                      setState(() {
+                        btnSort = 2;
+                      });
+                    }
+                  },
+                  child: const Text("Terendah"),
+                  style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: btnSort == 2
+                          ? Colors.yellow[900]
+                          : Colors.yellow[700])),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        StreamBuilder(
+          stream: btnSort == 1
+              ? FirebaseFirestore.instance
+                  .collection('logBooking')
+                  .orderBy("rating", descending: true)
+                  .snapshots()
+              : btnSort == 2
+                  ? FirebaseFirestore.instance
+                      .collection('logBooking')
+                      .orderBy("rating", descending: false)
+                      .snapshots()
+                  : FirebaseFirestore.instance
+                      .collection('logBooking')
+                      .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListReviewService(
+                listHasilBooking: snapshot.data!.docs,
+              );
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
       ],
-    );
-  }
-
-  review() {
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection('logBooking')
-          .orderBy("rating", descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListReviewService(
-            listHasilBooking: snapshot.data!.docs,
-          );
-        }
-        return const Center(child: CircularProgressIndicator());
-      },
     );
   }
 

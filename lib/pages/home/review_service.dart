@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:service_booking_system/utils/constant.dart';
+import 'package:algorithmic/sorting.dart';
 
 class ListReviewService extends StatefulWidget {
   final List<DocumentSnapshot> listHasilBooking;
@@ -26,6 +27,24 @@ class _ListReviewServiceState extends State<ListReviewService> {
             String storageRating = itemsList["rating"];
             String storageKomentar = itemsList["komentar"];
 
+            // selectionSort(widget.listHasilBooking);
+            // for (var currentIndex = 0;
+            //     currentIndex <= widget.listHasilBooking.length - 1;
+            //     currentIndex++) {
+            //   var smallerIndex = currentIndex;
+            //   for (var i = currentIndex + 1;
+            //       i <= widget.listHasilBooking.length;
+            //       i++) {
+            //     if (widget.listHasilBooking[i] < widget.listHasilBooking[smallerIndex]) {
+            //       smallerIndex = i;
+            //     }
+            //   }
+            //   final tmp = widget.listHasilBooking[currentIndex];
+            //   widget.listHasilBooking[currentIndex] =
+            //       widget.listHasilBooking[smallerIndex];
+            //   widget.listHasilBooking[smallerIndex] = tmp;
+            // }
+            // print("HASIL ${widget.listHasilBooking}");
             return storageRating == "Belum ada rating"
                 ? const SizedBox()
                 : Container(

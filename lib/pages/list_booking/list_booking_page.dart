@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:service_booking_system/pages/list_booking/histori_servis.dart';
+import 'package:service_booking_system/pages/home/histori_servis/histori_servis.dart';
 import 'package:service_booking_system/pages/list_booking/log_booking_page.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
