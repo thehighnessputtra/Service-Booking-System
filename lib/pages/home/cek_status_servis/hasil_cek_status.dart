@@ -59,8 +59,7 @@ class HasilCekStatusServis extends StatelessWidget {
                                 const Expanded(
                                     flex: 1, child: Text("No. Handphone")),
                                 const Text(": "),
-                                Expanded(
-                                    flex: 3, child: Text(dataNoHp.toString()))
+                                Expanded(flex: 3, child: Text("0$dataNoHp"))
                               ],
                             ),
                             Row(

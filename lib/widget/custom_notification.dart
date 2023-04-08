@@ -1,25 +1,5 @@
 import 'package:flutter/material.dart';
 
-void dialogInfo(BuildContext context, String text, int durationDelay) async {
-  Future.delayed(Duration(seconds: durationDelay), () {
-    Navigator.pop(context);
-  });
-  await showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(15))),
-        title: Text(
-          text,
-          textAlign: TextAlign.center,
-        ),
-      );
-    },
-  );
-}
-
 void dialogInfoWithoutDelay(BuildContext context, String text) async {
   await showDialog<void>(
     context: context,
@@ -116,6 +96,70 @@ void dialogValidasi(
               ),
             ])
           ]);
+    },
+  );
+}
+
+void dialogConfirmBottomSheet(BuildContext context, String title,
+    String message, VoidCallback onPress) async {
+  await showModalBottomSheet<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        padding: const EdgeInsets.all(30.0),
+        child: Wrap(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    message,
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[600],
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("No"),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey,
+                        ),
+                        onPressed: onPress,
+                        child: const Text("Yes"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
     },
   );
 }

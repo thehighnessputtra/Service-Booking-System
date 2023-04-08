@@ -308,6 +308,9 @@ class _BerikanReviewPageState extends State<BerikanReviewPage> {
                                                           Colors.blueGrey,
                                                     ),
                                                     onPressed: () {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
                                                       if (status
                                                               .get("status") ==
                                                           "Servis selesai") {

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:service_booking_system/pages/home/berikan_review/berikan_review_page.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
 import 'package:service_booking_system/widget/custom_notification.dart';
@@ -29,7 +28,7 @@ class _JadwalServisPageState extends State<JadwalServisPage> {
         child: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('jadwalServis')
-              .orderBy('tanggal')
+              .orderBy("updateTime", descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -96,6 +95,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
           String storageGambarUrl = itemsList["gambarUrl"];
           String storageGambarNama = itemsList["gambarNama"];
           String storageUpdateBy = itemsList["updateBy"];
+          String storageNoTiket = itemsList["noTiket"];
 
           return Column(
               // padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -113,6 +113,13 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                   flex: 5,
                                   child: Text(
                                       ": ${DateFormat("EEEE, d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} / $storageJam")),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Expanded(flex: 2, child: Text("No. Tiket")),
+                              Expanded(
+                                  flex: 5, child: Text(": $storageNoTiket")),
                             ],
                           ),
                           Row(
@@ -323,12 +330,12 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                                                         status:
                                                                             "Servis selesai",
                                                                       );
-                                                                      // FirebaseService(
-                                                                      //         FirebaseAuth.instance)
-                                                                      //     .deleteJadwalServisToFirebase(
-                                                                      //   title:
-                                                                      //       "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
-                                                                      // );
+                                                                      FirebaseService(
+                                                                              FirebaseAuth.instance)
+                                                                          .deleteJadwalServisToFirebase(
+                                                                        title:
+                                                                            "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                      );
                                                                       dialogInfoWithoutDelay(
                                                                         context,
                                                                         "Servis $storageNama telah selesai!",

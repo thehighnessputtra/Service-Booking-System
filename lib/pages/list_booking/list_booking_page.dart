@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
 
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,7 @@ import 'package:service_booking_system/pages/home/histori_servis/histori_servis.
 import 'package:service_booking_system/pages/list_booking/log_booking_page.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
+import 'package:service_booking_system/widget/custom_notification.dart';
 import 'package:service_booking_system/widget/transition_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -92,6 +95,8 @@ class HasilBooking extends StatefulWidget {
 class _HasilBookingState extends State<HasilBooking> {
   String? email;
   String? role;
+
+  int? noTiket;
 
   Future getAcc() async {
     await FirebaseFirestore.instance
@@ -239,7 +244,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                   flex: 5, child: Text(": $storageStatus")),
                             ],
                           ),
-                          role == "Admin"
+                          role == "Admin" && storageStatus == "Menunggu"
                               ? Row(
                                   children: [
                                     CustomButton1(
@@ -349,32 +354,7 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                       );
                                                                     },
                                                                   );
-                                                                  FirebaseService(FirebaseAuth.instance).postJadwalServisToFirestore(
-                                                                      emailAdmin:
-                                                                          email!,
-                                                                      gambarNama:
-                                                                          storageGambarNama,
-                                                                      gambarUrl:
-                                                                          storageGambarUrl,
-                                                                      jenisServis:
-                                                                          storageJenisServis,
-                                                                      jumlahKm:
-                                                                          storageJumlahKm,
-                                                                      nama:
-                                                                          storageNama,
-                                                                      noHp:
-                                                                          storageNoHP,
-                                                                      noPolisi:
-                                                                          storageNoPolisi,
-                                                                      jam:
-                                                                          storageJam,
-                                                                      title:
-                                                                          "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
-                                                                      tanggal: DateTime.parse(storageTanggal
-                                                                          .toDate()
-                                                                          .toString()),
-                                                                      tipeMotor:
-                                                                          storageTipeMotor);
+
                                                                   Future.delayed(
                                                                       const Duration(
                                                                           seconds:
@@ -447,12 +427,16 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                     //                                     ? dataJam16 - 1
                                                                     //                                     : 404,
                                                                     //     hitungMontir: dataMontir - 1);
-                                                                    FirebaseService(FirebaseAuth
-                                                                            .instance)
-                                                                        .deleteListBookingToFirebase(
-                                                                            title:
-                                                                                "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP");
                                                                   });
+                                                                  FirebaseService(
+                                                                          FirebaseAuth
+                                                                              .instance)
+                                                                      .updateStatusListBooking(
+                                                                          status:
+                                                                              "Booking diterima",
+                                                                          title:
+                                                                              "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP");
+
                                                                   Navigator.pop(
                                                                       context);
                                                                 },
@@ -618,13 +602,13 @@ class _HasilBookingState extends State<HasilBooking> {
                                                                       tipeMotor:
                                                                           storageTipeMotor,
                                                                     );
-
-                                                                    FirebaseService(FirebaseAuth
-                                                                            .instance)
-                                                                        .deleteListBookingToFirebase(
-                                                                            title:
-                                                                                "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP");
                                                                   });
+                                                                  FirebaseService(
+                                                                          FirebaseAuth
+                                                                              .instance)
+                                                                      .deleteListBookingToFirebase(
+                                                                          title:
+                                                                              "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP");
                                                                   Navigator.pop(
                                                                       context);
                                                                 },
@@ -648,7 +632,47 @@ class _HasilBookingState extends State<HasilBooking> {
                                     ),
                                   ],
                                 )
-                              : const SizedBox()
+                              : storageStatus == "Booking diterima" &&
+                                      role == "Admin"
+                                  ? CustomButton3(
+                                      btnName: "No Tiket",
+                                      onPress: () {
+                                        noTiket = Random().nextInt(99);
+                                        dialogConfirmBottomSheet(
+                                            context,
+                                            "KONFIRMASI BERIKAN NO TIKET",
+                                            "Tiket : ${DateFormat("dM", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))}$noTiket",
+                                            () {
+                                          dialogInfoWithoutDelay(context,
+                                              "Sukses memberikan tiket\n No. Tiket = ${DateFormat("dM", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))}$noTiket");
+                                          FirebaseService(FirebaseAuth.instance)
+                                              .postJadwalServisToFirestore(
+                                                  emailAdmin: email!,
+                                                  gambarNama: storageGambarNama,
+                                                  gambarUrl: storageGambarUrl,
+                                                  noTiket:
+                                                      "${int.parse(DateFormat("dM", "ID").format(DateTime.parse(storageTanggal.toDate().toString())))}$noTiket",
+                                                  jenisServis:
+                                                      storageJenisServis,
+                                                  jumlahKm: storageJumlahKm,
+                                                  nama: storageNama,
+                                                  noHp: storageNoHP,
+                                                  noPolisi: storageNoPolisi,
+                                                  jam: storageJam,
+                                                  title:
+                                                      "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                  tanggal: DateTime.parse(
+                                                      storageTanggal
+                                                          .toDate()
+                                                          .toString()),
+                                                  tipeMotor: storageTipeMotor);
+                                          FirebaseService(FirebaseAuth.instance)
+                                              .deleteListBookingToFirebase(
+                                                  title:
+                                                      "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP");
+                                        });
+                                      })
+                                  : SizedBox()
                         ],
                       ),
                     ),

@@ -490,20 +490,11 @@ class _BookingPageState extends State<BookingPage> {
                                                               tipeMotor:
                                                                   controllerTipeMotor
                                                                       .text);
-                                                      Future.delayed(
-                                                          const Duration(
-                                                              seconds: 1), () {
-                                                        dialogInfo(
-                                                            context,
-                                                            "Berhasil booking!",
-                                                            3);
-                                                      });
 
-                                                      Future.delayed(
-                                                          const Duration(
-                                                              seconds: 3), () {
-                                                        Navigator.pop(context);
-                                                      });
+                                                      dialogInfoWithoutDelay(
+                                                        context,
+                                                        "Berhasil booking!",
+                                                      );
                                                     }
                                                   },
                                                   child: const Text("Yes"),
@@ -557,9 +548,15 @@ class _BookingPageState extends State<BookingPage> {
         });
 
         // ignore: use_build_context_synchronously
-        dialogInfo(context, "Foto sukses diupload!", 2);
+        dialogInfoWithoutDelay(
+          context,
+          "Foto sukses diupload!",
+        );
       } else {
-        dialogInfo(context, "Foto gagal diupload!", 2);
+        dialogInfoWithoutDelay(
+          context,
+          "Foto gagal diupload!",
+        );
       }
     }
   }

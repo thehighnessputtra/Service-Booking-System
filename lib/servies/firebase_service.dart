@@ -34,9 +34,15 @@ class FirebaseService {
       // dialogInfo(context, e.message!);
       if (e.message ==
           "The password is invalid or the user does not have a password.") {
-        return dialogInfo(context, "Password salah!", 2);
+        return dialogInfoWithoutDelay(
+          context,
+          "Password salah!",
+        );
       } else {
-        return dialogInfo(context, "Email tidak terdaftar!", 2);
+        return dialogInfoWithoutDelay(
+          context,
+          "Email tidak terdaftar!",
+        );
       }
     }
   }
@@ -48,12 +54,18 @@ class FirebaseService {
       // ignore: use_build_context_synchronously
       authRoute(context, "Logout success!", const LoginPage());
     } on FirebaseAuthException catch (e) {
-      dialogInfo(context, e.message!, 2);
+      dialogInfoWithoutDelay(
+        context,
+        e.message!,
+      );
     }
   }
 
   authRoute(context, String text, Widget page) {
-    dialogInfo(context, text, 2);
+    dialogInfoWithoutDelay(
+      context,
+      text,
+    );
     Future.delayed(
       const Duration(seconds: 2),
       () => navReplaceTransition(context, page),
@@ -130,6 +142,19 @@ class FirebaseService {
     });
   }
 
+  updateStatusListBooking({
+    required String title,
+    required String status,
+  }) async {
+    CollectionReference fireStore =
+        FirebaseFirestore.instance.collection("listBooking");
+    fireStore.doc(title).update({
+      "status": status,
+      "createTime":
+          DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
+    });
+  }
+
   deleteListBookingToFirebase({required String title}) {
     CollectionReference fireStore =
         FirebaseFirestore.instance.collection('listBooking');
@@ -146,6 +171,7 @@ class FirebaseService {
       required String jam,
       required String title,
       required int noHp,
+      required String noTiket,
       required String noPolisi,
       required String emailAdmin,
       required String tipeMotor}) async {
@@ -161,11 +187,13 @@ class FirebaseService {
       "noPolisi": noPolisi,
       "tanggal": tanggal,
       "jam": jam,
+      "noTiket": noTiket,
       "tipeMotor": tipeMotor,
       "komentar": "Belum ada komentar",
       "status": "Booking diterima",
       "rating": "Belum ada rating",
       "updateBy": emailAdmin,
+      "updateTime": DateTime.now().millisecondsSinceEpoch,
       "createTime":
           DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
     });
@@ -229,18 +257,18 @@ class FirebaseService {
   }) async {
     CollectionReference fireStore =
         FirebaseFirestore.instance.collection("logBooking");
-    fireStore
-        .doc(title)
-        .update({
-          "rating": rating,
-          "komentar": komentar,
-          "createTime":
-              DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
-        })
-        .then((value) =>
-            dialogInfoWithoutDelay(context, "Review sukses diberikan!"))
-        .onError((error, stackTrace) => dialogInfoWithoutDelay(context,
-            "Review gagal diberikan!\n\nPastikan sudah memasukan tanggal, jam servis dan nomor yang sesuai dengan booking"));
+    fireStore.doc(title).update({
+      "rating": rating,
+      "komentar": komentar,
+      "createTime":
+          DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
+    }).then((value) {
+      FocusManager.instance.primaryFocus?.unfocus();
+      dialogInfoWithoutDelay(context, "Review sukses diberikan!");
+    }).onError((error, stackTrace) {
+      dialogInfoWithoutDelay(context,
+          "Review gagal diberikan!\n\nPastikan sudah memasukan tanggal, jam servis dan nomor yang sesuai dengan booking");
+    });
   }
 }
 
