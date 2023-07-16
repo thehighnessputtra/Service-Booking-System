@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:service_booking_system/navbar/navigation_bar.dart';
 import 'package:service_booking_system/pages/home/histori_servis/histori_servis.dart';
 import 'package:service_booking_system/pages/list_booking/log_booking_page.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
@@ -163,6 +164,7 @@ class _HasilBookingState extends State<HasilBooking> {
                       child: Column(
                         children: [
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Expanded(flex: 2, child: Text("Tgl/Jam")),
                               Expanded(
@@ -670,6 +672,14 @@ class _HasilBookingState extends State<HasilBooking> {
                                               .deleteListBookingToFirebase(
                                                   title:
                                                       "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP");
+                                          Future.delayed(Duration(seconds: 3),
+                                              () {
+                                            navReplaceTransition(
+                                                context,
+                                                NavigationBarUI(
+                                                  currentIndex: 1,
+                                                ));
+                                          });
                                         });
                                       })
                                   : SizedBox()
@@ -677,7 +687,7 @@ class _HasilBookingState extends State<HasilBooking> {
                       ),
                     ),
                     Expanded(
-                        flex: 2,
+                        flex: 1,
                         child: role == "Admin"
                             ? GestureDetector(
                                 onTap: () async {

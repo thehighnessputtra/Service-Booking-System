@@ -16,6 +16,7 @@ class HistoriServis extends StatelessWidget {
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection("selesaiServis")
+              .orderBy("tanggal", descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {

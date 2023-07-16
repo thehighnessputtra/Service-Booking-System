@@ -356,16 +356,16 @@ class _HomePageState extends State<HomePage> {
         StreamBuilder(
           stream: btnSort == 1
               ? FirebaseFirestore.instance
-                  .collection('logBooking')
+                  .collection('selesaiServis')
                   .orderBy("rating", descending: true)
                   .snapshots()
               : btnSort == 2
                   ? FirebaseFirestore.instance
-                      .collection('logBooking')
+                      .collection('selesaiServis')
                       .orderBy("rating", descending: false)
                       .snapshots()
                   : FirebaseFirestore.instance
-                      .collection('logBooking')
+                      .collection('selesaiServis')
                       .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {

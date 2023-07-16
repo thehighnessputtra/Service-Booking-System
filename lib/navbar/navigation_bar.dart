@@ -5,13 +5,14 @@ import 'package:service_booking_system/pages/jadwal_servis/jadwal_servis_page.da
 import 'package:service_booking_system/pages/list_booking/list_booking_page.dart';
 
 class NavigationBarUI extends StatefulWidget {
-  const NavigationBarUI({super.key});
+  NavigationBarUI({super.key, this.currentIndex = 0});
+  int currentIndex;
+
   @override
   State<NavigationBarUI> createState() => _NavigationBarUIState();
 }
 
 class _NavigationBarUIState extends State<NavigationBarUI> {
-  int currentIndex = 0;
   final List<Widget> screens = [
     const HomePage(),
     const JadwalServisPage(),
@@ -21,7 +22,7 @@ class _NavigationBarUIState extends State<NavigationBarUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: screens[currentIndex],
+        body: screens[widget.currentIndex],
         bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
             type: BottomNavigationBarType.fixed,
@@ -29,8 +30,8 @@ class _NavigationBarUIState extends State<NavigationBarUI> {
             selectedItemColor: Colors.black,
             unselectedItemColor: Colors.white,
             iconSize: 25,
-            currentIndex: currentIndex,
-            onTap: (index) => setState(() => currentIndex = index),
+            currentIndex: widget.currentIndex,
+            onTap: (index) => setState(() => widget.currentIndex = index),
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home_filled),

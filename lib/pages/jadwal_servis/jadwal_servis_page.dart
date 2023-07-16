@@ -107,6 +107,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                       child: Column(
                         children: [
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Expanded(flex: 2, child: Text("Tgl/Jam")),
                               Expanded(
@@ -116,6 +117,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                             ],
                           ),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Expanded(flex: 2, child: Text("No. Tiket")),
                               Expanded(
@@ -123,6 +125,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                             ],
                           ),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Expanded(flex: 2, child: Text("Nama")),
                               Expanded(flex: 5, child: Text(": $storageNama")),
@@ -130,6 +133,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                           ),
                           role == "Admin"
                               ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Expanded(
                                         flex: 2, child: Text("No HP")),
@@ -140,6 +144,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                 )
                               : const SizedBox(),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Expanded(
                                   flex: 2, child: Text("Tipe Motor")),
@@ -149,6 +154,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                           ),
                           role == "Admin"
                               ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Expanded(
                                         flex: 2, child: Text("No Polisi")),
@@ -159,6 +165,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                                 )
                               : const SizedBox(),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Expanded(
                                   flex: 2, child: Text("Jenis Servis")),
@@ -168,6 +175,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                             ],
                           ),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Expanded(flex: 2, child: Text("Status")),
                               Expanded(
@@ -176,6 +184,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                           ),
                           role == "Admin"
                               ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Expanded(
                                         flex: 2, child: Text("Jumlah Km")),
@@ -187,6 +196,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                               : const SizedBox(),
                           role == "Admin"
                               ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Expanded(
                                         flex: 2, child: Text("Acc by")),
@@ -198,275 +208,270 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                               : const SizedBox(),
                           role == "Admin"
                               ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        CustomButton1(
-                                            btnName: "Chat WA",
-                                            onPress: () async {
-                                              if (storageNoHP != null) {
-                                                final Uri url = Uri.parse(
-                                                    "https://api.whatsapp.com/send?phone=62$storageNoHP&text=Halo%20$storageNama");
-                                                if (!await launchUrl(url,
-                                                    mode: LaunchMode
-                                                        .externalApplication)) {
-                                                  throw "Could not launch $url";
-                                                }
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
-                                                        content: Text(
-                                                            "Could not launch URL!")));
-                                              }
-                                            }),
-                                        const SizedBox(
-                                          width: 5.0,
-                                        ),
-                                        CustomButton3(
-                                            btnName: "SELESAI",
-                                            onPress: () async {
-                                              await showModalBottomSheet<void>(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Container(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            30.0),
-                                                    child: Wrap(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: MediaQuery.of(
-                                                                  context)
-                                                              .size
-                                                              .width,
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: <Widget>[
-                                                              const Text(
-                                                                "KONFIRMASI SERVIS",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize:
-                                                                      16.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 20.0,
-                                                              ),
-                                                              Text(
-                                                                'Apakah yakin ingin menyelesaikan servis dari $storageNama?',
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 20.0,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  ElevatedButton(
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .grey[600],
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    },
-                                                                    child:
-                                                                        const Text(
-                                                                            "No"),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    width: 10.0,
-                                                                  ),
-                                                                  ElevatedButton(
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .blueGrey,
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      FirebaseService(FirebaseAuth.instance).postSelesaiServisToFirestore(
-                                                                          gambarUrl:
-                                                                              storageGambarUrl,
-                                                                          gambarNama:
-                                                                              storageGambarNama,
-                                                                          emailAdmin:
-                                                                              email!,
-                                                                          nama:
-                                                                              storageNama,
-                                                                          jenisServis:
-                                                                              storageJenisServis,
-                                                                          jam:
-                                                                              storageJam,
-                                                                          noHp:
-                                                                              storageNoHP,
-                                                                          noPolisi:
-                                                                              storageNoPolisi,
-                                                                          jumlahKm:
-                                                                              storageJumlahKm,
-                                                                          tanggal: DateTime.parse(storageTanggal
-                                                                              .toDate()
-                                                                              .toString()),
-                                                                          tipeMotor:
-                                                                              storageTipeMotor);
-                                                                      FirebaseService(
-                                                                              FirebaseAuth.instance)
-                                                                          .updateStatusLogBooking(
-                                                                        title:
-                                                                            "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
-                                                                        status:
-                                                                            "Servis selesai",
-                                                                      );
-                                                                      FirebaseService(
-                                                                              FirebaseAuth.instance)
-                                                                          .deleteJadwalServisToFirebase(
-                                                                        title:
-                                                                            "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
-                                                                      );
-                                                                      dialogInfoWithoutDelay(
-                                                                        context,
-                                                                        "Servis $storageNama telah selesai!",
-                                                                      );
-                                                                    },
-                                                                    child: const Text(
-                                                                        "Yes"),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            }),
-                                        const SizedBox(
-                                          width: 5.0,
-                                        ),
-                                        CustomButton2(
-                                            btnName: "CANCEL",
-                                            onPress: () async {
-                                              await showModalBottomSheet<void>(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Container(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            30.0),
-                                                    child: Wrap(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: MediaQuery.of(
-                                                                  context)
-                                                              .size
-                                                              .width,
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: <Widget>[
-                                                              const Text(
-                                                                "KONFIRMASI SERVIS",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize:
-                                                                      16.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 20.0,
-                                                              ),
-                                                              Text(
-                                                                'Apakah yakin ingin cancel servis dari $storageNama?',
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 20.0,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  ElevatedButton(
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .grey[600],
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    },
-                                                                    child:
-                                                                        const Text(
-                                                                            "No"),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    width: 10.0,
-                                                                  ),
-                                                                  ElevatedButton(
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .blueGrey,
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      FirebaseService(
-                                                                              FirebaseAuth.instance)
-                                                                          .updateStatusLogBooking(
-                                                                        title:
-                                                                            "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
-                                                                        status:
-                                                                            "Servis cancel",
-                                                                      );
-                                                                      FirebaseService(
-                                                                              FirebaseAuth.instance)
-                                                                          .deleteJadwalServisToFirebase(
-                                                                        title:
-                                                                            "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
-                                                                      );
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    },
-                                                                    child: const Text(
-                                                                        "Yes"),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            }),
-                                      ],
+                                    CustomButton1(
+                                        btnName: "Chat WA",
+                                        onPress: () async {
+                                          if (storageNoHP != null) {
+                                            final Uri url = Uri.parse(
+                                                "https://api.whatsapp.com/send?phone=62$storageNoHP&text=Halo%20$storageNama");
+                                            if (!await launchUrl(url,
+                                                mode: LaunchMode
+                                                    .externalApplication)) {
+                                              throw "Could not launch $url";
+                                            }
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        "Could not launch URL!")));
+                                          }
+                                        }),
+                                    const SizedBox(
+                                      width: 5.0,
                                     ),
+                                    CustomButton3(
+                                        btnName: "SELESAI",
+                                        onPress: () async {
+                                          await showModalBottomSheet<void>(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Container(
+                                                padding:
+                                                    const EdgeInsets.all(30.0),
+                                                child: Wrap(
+                                                  children: [
+                                                    SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          const Text(
+                                                            "KONFIRMASI SERVIS",
+                                                            style: TextStyle(
+                                                              fontSize: 16.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20.0,
+                                                          ),
+                                                          Text(
+                                                            'Apakah yakin ingin menyelesaikan servis dari $storageNama?',
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20.0,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                  backgroundColor:
+                                                                      Colors.grey[
+                                                                          600],
+                                                                ),
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        "No"),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 10.0,
+                                                              ),
+                                                              ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .blueGrey,
+                                                                ),
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  FirebaseService(FirebaseAuth.instance).postSelesaiServisToFirestore(
+                                                                      title:
+                                                                          "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                      gambarUrl:
+                                                                          storageGambarUrl,
+                                                                      gambarNama:
+                                                                          storageGambarNama,
+                                                                      emailAdmin:
+                                                                          email!,
+                                                                      nama:
+                                                                          storageNama,
+                                                                      jenisServis:
+                                                                          storageJenisServis,
+                                                                      jam:
+                                                                          storageJam,
+                                                                      noHp:
+                                                                          storageNoHP,
+                                                                      noPolisi:
+                                                                          storageNoPolisi,
+                                                                      jumlahKm:
+                                                                          storageJumlahKm,
+                                                                      tanggal: DateTime.parse(storageTanggal
+                                                                          .toDate()
+                                                                          .toString()),
+                                                                      tipeMotor:
+                                                                          storageTipeMotor);
+                                                                  FirebaseService(
+                                                                          FirebaseAuth
+                                                                              .instance)
+                                                                      .updateStatusLogBooking(
+                                                                    title:
+                                                                        "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                    status:
+                                                                        "Servis selesai",
+                                                                  );
+                                                                  FirebaseService(
+                                                                          FirebaseAuth
+                                                                              .instance)
+                                                                      .deleteJadwalServisToFirebase(
+                                                                    title:
+                                                                        "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                  );
+                                                                  dialogInfoWithoutDelay(
+                                                                    context,
+                                                                    "Servis $storageNama telah selesai!",
+                                                                  );
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        "Yes"),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        }),
+                                    const SizedBox(
+                                      width: 5.0,
+                                    ),
+                                    CustomButton2(
+                                        btnName: "CANCEL",
+                                        onPress: () async {
+                                          await showModalBottomSheet<void>(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Container(
+                                                padding:
+                                                    const EdgeInsets.all(30.0),
+                                                child: Wrap(
+                                                  children: [
+                                                    SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          const Text(
+                                                            "KONFIRMASI SERVIS",
+                                                            style: TextStyle(
+                                                              fontSize: 16.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20.0,
+                                                          ),
+                                                          Text(
+                                                            'Apakah yakin ingin cancel servis dari $storageNama?',
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20.0,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                  backgroundColor:
+                                                                      Colors.grey[
+                                                                          600],
+                                                                ),
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        "No"),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 10.0,
+                                                              ),
+                                                              ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .blueGrey,
+                                                                ),
+                                                                onPressed: () {
+                                                                  FirebaseService(
+                                                                          FirebaseAuth
+                                                                              .instance)
+                                                                      .updateStatusLogBooking(
+                                                                    title:
+                                                                        "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                    status:
+                                                                        "Servis cancel",
+                                                                  );
+                                                                  FirebaseService(
+                                                                          FirebaseAuth
+                                                                              .instance)
+                                                                      .deleteJadwalServisToFirebase(
+                                                                    title:
+                                                                        "${DateFormat("d-MMMM-y", "ID").format(DateTime.parse(storageTanggal.toDate().toString()))} $storageJam $storageNoHP",
+                                                                  );
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        "Yes"),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        }),
                                   ],
                                 )
                               : const SizedBox()
@@ -474,7 +479,7 @@ class _ListJadwalServisPageState extends State<ListJadwalServisPage> {
                       ),
                     ),
                     Expanded(
-                        flex: 2,
+                        flex: 1,
                         child: role == "Admin"
                             ? GestureDetector(
                                 onTap: () async {

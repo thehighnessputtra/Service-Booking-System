@@ -308,26 +308,18 @@ class _BerikanReviewPageState extends State<BerikanReviewPage> {
                                                           Colors.blueGrey,
                                                     ),
                                                     onPressed: () {
-                                                      FocusManager
-                                                          .instance.primaryFocus
-                                                          ?.unfocus();
-                                                      if (status
-                                                              .get("status") ==
-                                                          "Servis selesai") {
-                                                        FirebaseService(
-                                                                FirebaseAuth
-                                                                    .instance)
-                                                            .updateReviewLogBooking(
-                                                                context:
-                                                                    context,
-                                                                title:
-                                                                    "${DateFormat("d-MMMM-y", "ID").format(selectedDate)} $valueJamKerja ${int.parse(controllerNoHP.text)}",
-                                                                rating: ratingReview
-                                                                    .toString(),
-                                                                komentar:
-                                                                    controllerKomentar
-                                                                        .text);
-                                                      }
+                                                      FirebaseService(
+                                                              FirebaseAuth
+                                                                  .instance)
+                                                          .updateReviewLogBooking(
+                                                              context: context,
+                                                              title:
+                                                                  "${DateFormat("d-MMMM-y", "ID").format(selectedDate)} $valueJamKerja ${int.parse(controllerNoHP.text)}",
+                                                              rating: ratingReview
+                                                                  .toString(),
+                                                              komentar:
+                                                                  controllerKomentar
+                                                                      .text);
                                                     },
                                                     child: const Text("Yes"),
                                                   ),

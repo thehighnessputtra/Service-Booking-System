@@ -7,10 +7,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:service_booking_system/navbar/navigation_bar.dart';
 import 'package:service_booking_system/servies/firebase_service.dart';
 import 'package:service_booking_system/widget/custom_button.dart';
 import 'package:service_booking_system/widget/custom_notification.dart';
 import 'package:service_booking_system/widget/custom_textformfield.dart';
+import 'package:service_booking_system/widget/transition_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookingPage extends StatefulWidget {
@@ -491,10 +493,19 @@ class _BookingPageState extends State<BookingPage> {
                                                                   controllerTipeMotor
                                                                       .text);
 
-                                                      dialogInfoWithoutDelay(
-                                                        context,
-                                                        "Berhasil booking!",
-                                                      );
+                                                      customDialog(context,
+                                                          title: "INFO",
+                                                          content: Text(
+                                                              "Berhasil booking!"));
+                                                      Future.delayed(
+                                                          Duration(seconds: 2),
+                                                          () {
+                                                        navReplaceTransition(
+                                                            context,
+                                                            NavigationBarUI(
+                                                              currentIndex: 3,
+                                                            ));
+                                                      });
                                                     }
                                                   },
                                                   child: const Text("Yes"),

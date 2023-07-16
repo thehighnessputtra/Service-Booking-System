@@ -29,7 +29,7 @@ class FirebaseService {
       pref.saveEmail(email);
 
       // ignore: use_build_context_synchronously
-      authRoute(context, "Login success!", const NavigationBarUI());
+      authRoute(context, "Login success!", NavigationBarUI());
     } on FirebaseAuthException catch (e) {
       // dialogInfo(context, e.message!);
       if (e.message ==
@@ -226,19 +226,23 @@ class FirebaseService {
       required String jumlahKm,
       required String nama,
       required String jam,
+      required String title,
       required int noHp,
       required String noPolisi,
       required String emailAdmin,
       required String tipeMotor}) async {
     CollectionReference fireStore =
         FirebaseFirestore.instance.collection("selesaiServis");
-    fireStore.doc(DateTime.now().millisecondsSinceEpoch.toString()).set({
+    fireStore.doc(title).set({
       "gambarNama": gambarNama,
       "gambarUrl": gambarUrl,
       "jenisServis": jenisServis,
       "jumlahKm": jumlahKm,
       "nama": nama,
       "noHp": noHp,
+      "komentar": "Belum ada komentar",
+      "status": "Booking diterima",
+      "rating": "Belum ada rating",
       "noPolisi": noPolisi,
       "tanggal": tanggal,
       "jam": jam,
@@ -256,15 +260,17 @@ class FirebaseService {
     required String komentar,
   }) async {
     CollectionReference fireStore =
-        FirebaseFirestore.instance.collection("logBooking");
+        FirebaseFirestore.instance.collection("selesaiServis");
     fireStore.doc(title).update({
       "rating": rating,
       "komentar": komentar,
       "createTime":
           DateFormat("EEEE, d-MMMM-y H:m:s", "ID").format(DateTime.now()),
     }).then((value) {
-      FocusManager.instance.primaryFocus?.unfocus();
       dialogInfoWithoutDelay(context, "Review sukses diberikan!");
+      Future.delayed(Duration(seconds: 2), () {
+        navReplaceTransition(context, NavigationBarUI());
+      });
     }).onError((error, stackTrace) {
       dialogInfoWithoutDelay(context,
           "Review gagal diberikan!\n\nPastikan sudah memasukan tanggal, jam servis dan nomor yang sesuai dengan booking");

@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const NavigationBarUI()),
+        MaterialPageRoute(builder: (context) => NavigationBarUI()),
       );
     });
   }
@@ -26,8 +26,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text("Ini Splashscreen")),
+    return Scaffold(
+      body: Center(child: Image.asset("assets/logo.png", scale: 3)),
     );
   }
 }

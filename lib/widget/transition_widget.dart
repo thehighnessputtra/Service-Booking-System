@@ -20,21 +20,23 @@ navPushTransition(BuildContext context, Widget page) {
 }
 
 navReplaceTransition(BuildContext context, Widget page) {
-  Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return SlideTransition(
-            position: animation.drive(
-              Tween(begin: const Offset(2.0, 0.0), end: Offset.zero),
-            ),
-            child: child,
-          );
-        },
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return page;
-        },
-      ));
+  Navigator.pushAndRemoveUntil(
+    context,
+    PageRouteBuilder(
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return SlideTransition(
+          position: animation.drive(
+            Tween(begin: const Offset(2.0, 0.0), end: Offset.zero),
+          ),
+          child: child,
+        );
+      },
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return page;
+      },
+    ),
+    (route) => false,
+  );
 }
 
 navBackTransition(BuildContext context) {
