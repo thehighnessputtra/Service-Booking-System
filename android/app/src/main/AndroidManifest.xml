@@ -2,9 +2,9 @@
     package="com.example.service_booking_system">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="service_booking_system"
-        android:name="Ardian Workshop"
-        android:icon="assets/logo.png">
+        android:label="Ardian Workshop"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
